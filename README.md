@@ -1,3 +1,3 @@
 # HR-IOS-App
 
-io
+ios
