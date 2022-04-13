@@ -1,0 +1,151 @@
+{
+    "domain": "**/XCUIElementTypeTextField[`value == 'Domain'`]",
+    "id_login": "**/XCUIElementTypeTextField[`value == 'ID'`]",
+    "pass_login": "**/XCUIElementTypeSecureTextField[`value == 'Password'`]",
+    "login_button": "//XCUIElementTypeOther[@name='Login ']",
+
+    "domain_name": "groupware57.hanbiro.net",
+    "id_login_name_1": "quynh1",
+    "id_login_name_2": "quynh2",
+    "password": "quynh1!!",
+
+    "clock_in":{
+        "button_clock_in": "(//XCUIElementTypeOther[@name='Clock In'])[2]/XCUIElementTypeOther",
+
+        "status_on_time": "//XCUIElementTypeStaticText[@name='On Time']",
+        "status_late": "//XCUIElementTypeStaticText[@name='Tardiness']",
+
+        "reason_late": "//XCUIElementTypeTextView[@name='Please enter your reason']",
+        "reason_late_text": "I'm late",
+
+        "button_save": "//XCUIElementTypeOther[@name='Save']",
+
+        "button_close": "//XCUIElementTypeOther[@name='Close']"
+
+    },
+
+    "OT":{
+        "status_OT": "//XCUIElementTypeStaticText[@name='Night Shift']",
+        "confirm_OT": "//XCUIElementTypeOther[@name='Yes']",
+
+        "apply_OT": "//XCUIElementTypeOther[@name='Apply OT']",
+
+        "reason_OT": "//XCUIElementTypeTextView[@name='Please input a reason to apply OT']",
+        "reason_text": "apply OT",
+
+        "confirm_apply_OT": "//XCUIElementTypeOther[@name='APPLY OT']",
+        "button_close": "//XCUIElementTypeOther[@name='Close']"
+    },
+    
+    "break_time":{
+        "button_break_time": "//XCUIElementTypeOther[@name='Break Time']/XCUIElementTypeOther",
+        "end_break_time": "//XCUIElementTypeOther[@name='END BREAK TIME']"
+    },
+
+    "clock_out":{
+        "button_clock_out": "//XCUIElementTypeOther[@name='Clock Out']/XCUIElementTypeOther",
+        "status_clock_out": "//XCUIElementTypeStaticText[@name='Leave Early']",
+
+        "reason_clock_out": "//XCUIElementTypeTextView[@name='Please enter your reason']",
+        "reason_clock_out_text": "personal reason",
+
+        "confirm_clock_out": "//XCUIElementTypeOther[@name='Yes']",
+        "clock_out_success": "(//XCUIElementTypeOther[@name='Close'])[2]",
+
+        "button_close": "//XCUIElementTypeOther[@name='Close']"
+    },
+
+    "button_back": "",
+
+    "button_notification": "",
+    
+    "menu_timecard":{
+        "button_timecard": "//XCUIElementTypeButton[@name='Timecard']",
+        "button_timesheet": "",
+
+        "event":{
+            "add_event": "",
+            "title": "",
+            "event_type": "",
+            "select_type": "",
+            "select_color": "",
+            "button_save": "",
+            "pop_up": "",
+            "close_pop_up": "",
+            
+            "title_data": "Event",
+            "place_data": "Hanbiro_place",
+            "memo_data": "Hanbiro_memo"
+        },
+
+        "calendar_next": "",
+        "calendar_prev": "",
+        "calendar": "",
+        "select_date": "",
+
+        "list_tab": "",
+        "calendar_tab": "",
+
+        "report_tab":{
+            "monthly_tab": {
+                "events_tab": "",
+                "working_status": ""
+            },
+            "weekly_tab": {
+                "device_tab": "",
+                "average_tab": "",
+                "working_hours_tab": ""
+            },
+            "list_tab": {
+                "sort_by": "",
+                "list": "",
+                "": ""
+            }
+        },
+
+        "daily_status":{
+            "search": ""
+        }
+        
+
+
+
+    },
+
+    "menu_vacation":{
+        "button_vacation": "//XCUIElementTypeButton[@name='Vacation']"
+    },
+
+    "menu_admin":{
+        "button_admin": "//XCUIElementTypeButton[@name='Admin']",
+
+        "GPS_setting": "//XCUIElementTypeOther[@name='GPS Setting']",
+        
+
+        "Wifi_setting": "",
+
+        "Beacon_setting": ""
+    },
+
+    "menu_settings": {
+        "button_settings": "//XCUIElementTypeButton[@name='Settings']",
+
+        "change_language": "//XCUIElementTypeOther[@name='Change Language English']",
+
+        "korean": "(//XCUIElementTypeOther[@name='한국어'])[2]",
+        "vietnam": "(//XCUIElementTypeOther[@name='Tiếng Việt'])[2]",
+        "china": "(//XCUIElementTypeOther[@name='日本語'])[2]",
+        "japan": "(//XCUIElementTypeOther[@name='简体中文'])[2]",
+        "indo": "(//XCUIElementTypeOther[@name='Indonesian'])[2]",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": ""
+    }
+}
