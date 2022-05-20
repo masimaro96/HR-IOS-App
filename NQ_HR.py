@@ -1,3 +1,4 @@
+from asyncio import events
 from distutils.log import Log
 import time, sys, unittest, random, json, openpyxl, platform
 from datetime import datetime
@@ -24,21 +25,30 @@ udid = 'bc86e429485c13f34837866fde36e7ed55646317'
 app_path = 'Users/hanbiro/Desktop/nhuquynhios/HanbiroHR.ipa'
 command_executor ='http://127.0.0.1:%s/wd/hub' % APPIUM_PORT
 
-desired_capabilities = {
+'''desired_capabilities = {
     'orientation' :'LANDSCAPE',
     "deviceName": "Hanbiro Iphone",
     "platformVersion": "12.5.5",
     "platformName": "IOS",
     "udid": udid,
-    "app": app_path,
-    "autoWebView":True,
-    "fullContextList" : True,
-    "enablePerformanceLogging" :True
+    "app": app_path
+}'''
+
+desired_capabilities = {
+    #"xcodeOrgId": "9689HPSFXL",
+    #"xcodeSigningId": "iPhone Developer",
+    "deviceName": "Hanbiro Iphone",
+    "platformName": "IOS",
+    "orientation": "PORTRAIT",
+    #"newCommandTimeout": 0,
+    "automationName": "XCUITest",
+    "derivedDataPath" : "/Users/hanbiro/Library/Developer/Xcode/DerivedData/WebDriverAgent-aghlrsejdreqngftgvcqwnjgrbou",
+    "wdaConnectionTimeout": 500000,
+    "udid": udid,
+    "app": app_path
 }
 
-driver = webdriver.Remote(command_executor,desired_capabilities)
-with open("NQ_HR.json") as json_data_file:
-    data = json.load(json_data_file)
+driver = webdriver.Remote(command_executor, desired_capabilities)
 
 n = random.randint(1,3000)
 
@@ -55,7 +65,7 @@ class objects:
 
 if platform == "linux" or platform == "linux2":
     local_path = "/home/oem/groupware-auto-test"
-    json_file = local_path + "/NQ_HR.json"
+    json_file = local_path + "/NQ_config.json"
     with open(json_file) as json_data_file:
         data = json.load(json_data_file)
     log_folder = "/Log/"
@@ -65,8 +75,8 @@ if platform == "linux" or platform == "linux2":
     error_log = execution_log.replace("hanbiro_HR_execution_log_", "error_log_")
     testcase_log = local_path + log_testcase + "NQuynh_Testcase_HRApp_" + str(objects.date_id) + ".xlsx"
 else :
-    local_path = "/Users/hanbiro/Desktop/luuios"
-    json_file = local_path + "/NQ_HR.json"
+    local_path = "/Users/hanbiro/Desktop/nhuquynhios"
+    json_file = local_path + "/NQ_config.json"
     with open(json_file) as json_data_file:
         data = json.load(json_data_file)
     log_folder = "/Log/"
@@ -177,9 +187,11 @@ def execution():
     Logging("- Input ID")
     driver.find_element_by_ios_class_chain(data["pass_login"]).send_keys(data["password"])
     Logging("- Input Password")
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["login_button"]))).click()
+    WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, data["login_button"]))).click()
     Logging("=> Click Log In button")
-    driver.implicitly_wait(50)
+    driver.implicitly_wait(1000)
+
+    add_event()
 
 
 def clock_in():
@@ -253,15 +265,27 @@ def clock_out():
     except WebDriverException:
         Logging("=> Crash app")
 
+def view_noti():
+    Logging("--- View Notification ---")
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+
+def settings():
+    try:
+        Logging("--- Settings - Change language ---")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        
+    except WebDriverException:
+        Logging("=> Crash app")
+
 def add_event():
     try:
         Logging(" ")
         Logging("------- Add event -------")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["timecard"]))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timecard"]))).click()
         Logging("- Select time card")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["timesheet"]))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timesheet"]))).click()
         Logging("- Select time sheet")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["add"]))).click()
+        '''WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["add"]))).click()
         Logging("- Select add")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[contains(@text,'Please input data.')]"))).send_keys(data["event"]["title_text"])
         Logging("- Input title")
@@ -276,11 +300,10 @@ def add_event():
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[contains(@text,'Please add a memo.')]"))).send_keys(data["event"]["memo_text"])
         Logging("- Input memo")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["button_save"]))).click()
-        TesCase_LogResult(**data["testcase_result"]["timecard"]["event"]["pass"])
+        TesCase_LogResult(**data["testcase_result"]["timecard"]["event"]["pass"])'''
     except:
         Logging("- Can't create event")
-        TesCase_LogResult(**data["testcase_result"]["timecard"]["event"]["fail"])
-
+'''
     Logging("** Check event use approval type")
     try:
         approval_type = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["popup"])))
@@ -302,152 +325,8 @@ def add_event():
 
     driver.find_element_by_xpath(data["event"]["close_popup"]).click()
     Logging("=> Save event")
-    time.sleep(5)
+    time.sleep(5)'''
 
-def request_vacation():
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["button_vacation"]))).click()
-    print("- Vacation")
-    ''' Request vaction'''
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["request"]))).click() 
-    
-    title_request = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["request_vacation_text"])))
-    if title_request.text == 'Request vacation':
-        print("=> Request vacation")
-    else:
-        print("=> Crash app")
-        exit(0)   
-    try:
-        vacation_type = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["AM"])))
-        if vacation_type.is_displayed():
-            vacation_type.click()
-            print("- Select vacation type")
 
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["calendar"]))).click()
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]"))).click()
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]"))).click()
-            time.sleep(2)
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["select_calendar"]))).click()  
-            time.sleep(2)
-
-            ''' Crash app when select date '''
-            try:
-                title_request = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["request_vacation_text"])))
-                if title_request.text == 'Request vacation':
-                    print("- Select date vacation")
-                else:
-                    print("=> Crash app")
-                    exit(0)  
-            except WebDriverException: 
-                print("=> Crash app")
-                exit(0)
-
-            ''' Get data of vacation request '''
-            vacation_date = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["request_date_text"])))
-            vacation_text = vacation_date.text
-            date_text = vacation_text.split(" ")[0]
-            type_vacation = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["AM"])))
-            type_text = type_vacation.text
-            vacation_date_type = date_text + "(" + type_text + ")"            
-    except:
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["calendar"]))).click()
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]"))).click()
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]"))).click()
-        time.sleep(2)
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["select_calendar"]))).click()  
-        time.sleep(2)
-
-        ''' Get data of vacation request '''
-        vacation_date = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["request_date_text"])))
-        vacation_text = vacation_date.text
-        # date_text = vacation_text.split(" ")[0]
-        # type_vacation = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["AM"])))
-        # type_text = type_vacation.text
-        # vacation_date_type = vacation_text + "(" + type_text + ")"
-
-    driver.swipe(start_x=650, start_y=1844, end_x=650, end_y=355, duration=800)
-    time.sleep(5)
-    ''' Select CC '''
-    # WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["CC"]))).click()
-    # input_user_name()
-    # WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, "//*[contains(@text,'quynh1')]"))).click()
-    # WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["save_cc"]))).click()
-    # print("- Select CC")
-
-    driver.swipe(start_x=650, start_y=1662, end_x=650, end_y=355, duration=800)
-
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Please enter your reason']"))).send_keys(data["vacation"]["my_vacation"]["input_test"])
-    print("- Input reason")
-    
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["button_request"]))).click()
-    
-    '''- Check day request
-      + If vacation day is saturday => fail, check again
-      + If memo is empty => fail, check again'''
-    try:
-        fail = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["request_fail"])))
-        if fail.text == 'request vacation failure':
-            print("--- Request vacation failure - vacation day is saturday---")
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["close_fail"]))).click()
-            time.sleep(2)
-            driver.swipe(start_x=650, start_y=355, end_x=650, end_y=2275, duration=800)
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["calendar"]))).click()
-            time.sleep(2)
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]"))).click()
-            print("=> Select start date")
-            
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]"))).click()
-            print("=> Select end date")
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["select_calendar"]))).click()
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["button_request"]))).click() 
-            print("=> Send request vacation")
-            TesCase_LogResult(**data["testcase_result"]["vacation"]["request_vacation"]["pass"])
-        else:
-            print("=> Request success")
-            TesCase_LogResult(**data["testcase_result"]["vacation"]["request_vacation"]["pass"])
-    except WebDriverException:
-        print("=> Request success") 
-        TesCase_LogResult(**data["testcase_result"]["vacation"]["request_vacation"]["pass"])
-
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["my_vacation"]["button_close"]))).click()
-
-def cancel_request():
-    try:
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["cancel_request"]))).click()
-        print("- Cancel request")
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status"]))).click()
-
-        status_option1 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status_request"])))
-        status_name1 = str(status_option1.text)
-        status_option1.click()
-        print("- Status: " + status_name1)
-
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status"]))).click()
-        status_option2 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status_processing"])))
-        status_name2 = str(status_option2.text)
-        status_option2.click()
-        print("- Status: " + status_name2)
-
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status"]))).click()
-        status_option3 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status_waiting"])))
-        status_name3 = str(status_option3.text)
-        status_option3.click()
-        print("- Status: " + status_name3)
-
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status"]))).click()
-        status_option4 = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["access_pages_vacation"]["vacation_approve"]["status_complete"])))
-        status_name4 = str(status_option4.text)
-        status_option4.click()
-        print("- Status: " + status_name4)
-    except:
-        pass
-    
-#def view_noti():
-
-# def settings():
-#     try:
-#         Logging("--- Settings - Change language ---")
-#         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
-        
-#     except WebDriverException:
-#         Logging("=> Crash app")
-
+print("Như Quỳnh")
+execution()
