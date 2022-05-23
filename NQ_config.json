@@ -64,14 +64,17 @@
         "button_timesheet": "//XCUIElementTypeOther//XCUIElementTypeOther[3]",
 
         "event":{
-            "add_event": "",
-            "title": "",
-            "event_type": "",
-            "select_type": "",
-            "select_color": "",
-            "button_save": "",
+            "add_event": "//XCUIElementTypeOther[6]/XCUIElementTypeOther[3]",
+            "title": "(//XCUIElementTypeOther[@name='Please input data.'])[1]/XCUIElementTypeTextField",
+            "event_type": "XCUIElementTypeOther[3]",
+            "select_type": "(//XCUIElementTypeOther[@name='Outside'])[2]",
+            "select_color": "//XCUIElementTypeOther[2]/XCUIElementTypeOther[8]",
+            "place": "(//XCUIElementTypeOther[@name='Please input data.'])[2]/XCUIElementTypeTextField",
+            "memo": "//XCUIElementTypeTextView[@name='Please add a memo.']",
+            "button_save": "(//XCUIElementTypeOther[@name='Save'])[2]",
             "pop_up": "",
-            "close_pop_up": "",
+            "close_pop_up": "(//XCUIElementTypeOther[@name='Close'])[2]",
+            "done": "//XCUIElementTypeButton[@name='Return']",
             
             "title_data": "Event",
             "place_data": "Hanbiro_place",
@@ -113,14 +116,33 @@
     },
 
     "menu_vacation":{
-        "button_vacation": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[3]"
+        "button_vacation": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[3]",
+
+        "request_vacation": "//XCUIElementTypeOther[33]/XCUIElementTypeOther[1]//XCUIElementTypeOther[3]",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": "",
+        "": ""
     },
 
     "menu_admin":{
         "button_admin": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[4]",
 
         "GPS_setting": "//XCUIElementTypeOther[@name='GPS Setting']",
+        "add_GPS": "//XCUIElementTypeOther[@name='GPS Setting'])[1]/XCUIElementTypeOther//XCUIElementTypeOther[1]//XCUIElementTypeOther[2]",
+        "popup": "**/XCUIElementTypeOther[`label == 'Yes'`]",
+        "search_gps": "//XCUIElementTypeOther[@name='Please input a address']",
+        "gps": "(//XCUIElementTypeOther[@name='Nguyễn Thị Thập, District 7, Ho Chi Minh City, Vietnam'])[2]",
+        "workplace": "//XCUIElementTypeStaticText[@name='Workplace']/XCUIElementTypeOther[3]",
+        "save_GPS": "(//XCUIElementTypeOther[@name='Save'])[1]",
+        "done": "//XCUIElementTypeButton[@name='Return']",
         
+        "key_search": "nguyen",
 
         "Wifi_setting": "",
 

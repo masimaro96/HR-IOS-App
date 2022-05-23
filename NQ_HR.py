@@ -283,9 +283,9 @@ def add_event():
         Logging("------- Add event -------")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timecard"]))).click()
         Logging("- Select time card")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timesheet"]))).click()
+        WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timesheet"]))).click()
         Logging("- Select time sheet")
-        '''WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["add"]))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["add_event"]))).click()
         Logging("- Select add")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[contains(@text,'Please input data.')]"))).send_keys(data["event"]["title_text"])
         Logging("- Input title")
@@ -295,15 +295,15 @@ def add_event():
         Logging("- Choose event")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["select_color"]))).click()
         Logging("- Select color")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[contains(@text,'Please input data.')]"))).send_keys(data["event"]["location_text"])
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["place"]))).send_keys(data["event"]["location_text"])
         Logging("- Input location")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[contains(@text,'Please add a memo.')]"))).send_keys(data["event"]["memo_text"])
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["memo"]))).send_keys(data["event"]["memo_text"])
         Logging("- Input memo")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["button_save"]))).click()
-        TesCase_LogResult(**data["testcase_result"]["timecard"]["event"]["pass"])'''
+        TesCase_LogResult(**data["testcase_result"]["timecard"]["event"]["pass"])
     except:
         Logging("- Can't create event")
-'''
+
     Logging("** Check event use approval type")
     try:
         approval_type = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["popup"])))
@@ -325,7 +325,18 @@ def add_event():
 
     driver.find_element_by_xpath(data["event"]["close_popup"]).click()
     Logging("=> Save event")
-    time.sleep(5)'''
+    time.sleep(5)
+
+def request_vacation():
+    try:
+        Logging("-- Request vacation--")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timecard"]))).click()
+        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["button_vacation"]))).click()
+        Logging("- Request Vacation")
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["request_vacation"]))).click()
+        Logging("Save request")
+    except:
+        Logging("-> Can't request vacation")
 
 
 print("Như Quỳnh")
