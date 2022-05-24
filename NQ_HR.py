@@ -132,7 +132,7 @@ for log in logs:
         wb.save(log)
 
 def Logging(msg):
-    print(msg)
+    Logging(msg)
     log_msg = open(execution_log, "a")
     log_msg.write(str(msg) + "\n")
     log_msg.close()
@@ -265,14 +265,90 @@ def clock_out():
     except WebDriverException:
         Logging("=> Crash app")
 
+def view_calendar():
+    WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, data["calender_home"]["date"]))).click()
+    Logging("- Select calender")
+
 def view_noti():
     Logging("--- View Notification ---")
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_notification"]))).click()
+    Logging("- View content notification")
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_back"]))).click()
+    Logging("-> Back to menu")
 
 def settings():
     try:
         Logging("--- Settings - Change language ---")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='한국어']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='닫기']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        
+        korean_text = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        if korean_text.text == '한국어':
+            Logging("=> Change to language '한국어' success")
+        else:
+            Logging("=> Fail")
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='언어 설정']"))).click()
+        
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Tiếng Việt']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Đóng']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+
+        VN_text = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        if VN_text.text == 'Tiếng Việt':
+            Logging("=> Change to language 'Tiếng Việt' success")
+        else:
+            Logging("=> Fail")
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Thay đổi ngôn ngữ']"))).click()
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='日本語']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='閉じる']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+
+        JP = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        if JP.text == '日本語':
+            Logging("=> Change to language '日本語' success")
+        else:
+            Logging("=> Fail")
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='言語']"))).click()
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='简体中文']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='關閉']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+
+        TQ = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        if TQ.text == '简体中文':
+            Logging("=> Change to language '简体中文' success")
+        else:
+            Logging("=> Fail")
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='語言']"))).click()
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Indonesian']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Tutup']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+
+        indo = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        if indo.text == 'Indonesian':
+            Logging("=> Change to language 'Indonesian' success")
+        else:
+            Logging("=> Fail")
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Ganti BAHASA']"))).click()
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='English']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Close']"))).click()
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        EN = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        if EN.text == 'English':
+            Logging("=> Change to language 'English' success")
+        else:
+            Logging("=> Fail")
         
     except WebDriverException:
         Logging("=> Crash app")
@@ -339,5 +415,5 @@ def request_vacation():
         Logging("-> Can't request vacation")
 
 
-print("Như Quỳnh")
+Logging("Như Quỳnh")
 execution()

@@ -54,14 +54,23 @@
 
         "button_close": "//XCUIElementTypeOther[@name='Close']"
     },
+    "calender_home":{
+        "date": "//XCUIElementTypeScrollView/XCUIElementTypeOther[2]//XCUIElementTypeOther[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther//XCUIElementTypeOther[1]",
+        "date_to_view": "",
+        "select": "//XCUIElementTypeOther[@name='Select']",
+        "": "",
+        "popup_warning": "//XCUIElementTypeStaticText[@name='Warning']",
+        "button_close": "(//XCUIElementTypeOther[@name='Close'])[2]",
+        "": ""
+    },
 
-    "button_back": "",
+    "button_back": "(//XCUIElementTypeOther[@name='Notification'])[2]/XCUIElementTypeOther[1]/XCUIElementTypeOther",
 
     "button_notification": "(//XCUIElementTypeOther[@name='Hanbiro HR'])[1]/following-siblingg::XCUIElementTypeOther",
     
     "menu_timecard":{
         "button_timecard": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[2]",
-        "button_timesheet": "//XCUIElementTypeOther//XCUIElementTypeOther[3]",
+        "button_timesheet": "//XCUIElementTypeOther[33]/XCUIElementTypeOther[1]//XCUIElementTypeOther[3]",
 
         "event":{
             "add_event": "//XCUIElementTypeOther[6]/XCUIElementTypeOther[3]",
@@ -119,13 +128,7 @@
         "button_vacation": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[3]",
 
         "request_vacation": "//XCUIElementTypeOther[33]/XCUIElementTypeOther[1]//XCUIElementTypeOther[3]",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
+        
         "": "",
         "": ""
     },
@@ -152,7 +155,7 @@
     "menu_settings": {
         "button_settings": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[5]",
 
-        "change_language": "//XCUIElementTypeOther[@name='Change Language English']",
+        "change_language": "//XCUIElementTypeScrollView/XCUIElementTypeOther[3]/XCUIElementTypeOther/XCUIElementTypeOther[2]",
 
         "korean": "(//XCUIElementTypeOther[@name='한국어'])[2]",
         "vietnam": "(//XCUIElementTypeOther[@name='Tiếng Việt'])[2]",
