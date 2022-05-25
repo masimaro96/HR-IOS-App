@@ -20,6 +20,9 @@ from openpyxl.styles import Color, PatternFill, Border, Side, Alignment, Protect
 from openpyxl.styles import Color, Fill
 from openpyxl.cell import Cell
 
+from NQ_function import Logging, data
+from framework_sample import *
+
 APPIUM_PORT = '4723'
 udid = 'bc86e429485c13f34837866fde36e7ed55646317'
 app_path = 'Users/hanbiro/Desktop/nhuquynhios/HanbiroHR.ipa'
@@ -52,131 +55,6 @@ driver = webdriver.Remote(command_executor, desired_capabilities)
 
 n = random.randint(1,3000)
 
-class objects:
-    now = datetime.now()
-    year = now.strftime("%Y")
-    month = now.strftime("%m")
-    day = now.strftime("%d")
-    time1 = now.strftime("%H:%M:%S")
-    date_time = now.strftime("%Y/%m/%d, %H:%M:%S")
-    date_id = date_time.replace("/", "").replace(", ", "").replace(":", "")[2:]
-    testcase_pass = "Test case status: pass"
-    testcase_fail = "Test case status: fail"
-
-if platform == "linux" or platform == "linux2":
-    local_path = "/home/oem/groupware-auto-test"
-    json_file = local_path + "/NQ_config.json"
-    with open(json_file) as json_data_file:
-        data = json.load(json_data_file)
-    log_folder = "/Log/"
-    log_testcase = "/Log/"
-    execution_log = local_path + log_folder + "hanbiro_HR_execution_log_" + str(objects.date_id) + ".txt"
-    fail_log = execution_log.replace("hanbiro_HR_execution_log_", "fail_log_")
-    error_log = execution_log.replace("hanbiro_HR_execution_log_", "error_log_")
-    testcase_log = local_path + log_testcase + "NQuynh_Testcase_HRApp_" + str(objects.date_id) + ".xlsx"
-else :
-    local_path = "/Users/hanbiro/Desktop/nhuquynhios"
-    json_file = local_path + "/NQ_config.json"
-    with open(json_file) as json_data_file:
-        data = json.load(json_data_file)
-    log_folder = "/Log/"
-    log_testcase = "/Log/"
-    execution_log = local_path + log_folder + "hanbiro_HR_execution_log_" + str(objects.date_id) + ".txt"
-    fail_log = execution_log.replace("hanbiro_HR_execution_log_", "fail_log_")
-    error_log = execution_log.replace("hanbiro_HR_execution_log_", "error_log_")
-    testcase_log = local_path + log_testcase + "NQuynh_Testcase_HRApp_" + str(objects.date_id) + ".xlsx"
-
-logs = [execution_log, fail_log, error_log, testcase_log]
-for log in logs:
-    if ".txt" in log:
-        open(log, "x").close()
-    else:
-        wb = Workbook()
-        myFill = PatternFill(start_color='adc5e7',
-                   end_color='adc5e7',
-                   fill_type='solid',)
-        font = Font(name='Calibri',
-                    size=11 ,
-                    bold=True,
-                    italic=False,
-                    vertAlign=None,
-                    underline='none',
-                    strike=False,
-                    color='FF000000')
-        ws = wb.active
-
-        ws.cell(row=1, column=1).value= "Menu"
-        ws.cell(row=1, column=2).value = "Sub-Menu"
-        ws.cell(row=1, column=3).value = "Test Case Name"
-        ws.cell(row=1, column=4).value = "Status"
-        ws.cell(row=1, column=5).value = "Description"
-        ws.cell(row=1, column=6).value = "Date"
-        ws.cell(row=1, column=7).value = "Tester"
-        # color 
-        ws.cell(row=1, column=1).fill = myFill
-        ws.cell(row=1, column=2).fill = myFill
-        ws.cell(row=1, column=3).fill = myFill
-        ws.cell(row=1, column=4).fill = myFill
-        ws.cell(row=1, column=5).fill = myFill
-        ws.cell(row=1, column=6).fill = myFill
-        ws.cell(row=1, column=7).fill = myFill
-        # font
-        ws.cell(row=1, column=1).font = Font(bold=True)
-        ws.cell(row=1, column=2).font = Font(bold=True)
-        ws.cell(row=1, column=3).font = Font(bold=True)
-        ws.cell(row=1, column=4).font = Font(bold=True)
-        ws.cell(row=1, column=5).font = Font(bold=True)
-        ws.cell(row=1, column=6).font = Font(bold=True)
-        ws.cell(row=1, column=7).font = Font(bold=True)
-
-        wb.save(log)
-
-def Logging(msg):
-    Logging(msg)
-    log_msg = open(execution_log, "a")
-    log_msg.write(str(msg) + "\n")
-    log_msg.close()
-
-def TesCase_LogResult(menu, sub_menu, testcase, status, description, tester):
-    Logging(description)
-
-    # if status == "Pass":
-    #     Logging(objects.testcase_pass)
-    # else:
-    #     Logging(objects.testcase_fail)
-
-    wb = openpyxl.load_workbook(testcase_log)
-    current_sheet = wb.active
-    start_row = len(list(current_sheet.rows)) + 1
-
-    current_sheet.cell(row=start_row, column=1).value = menu
-    current_sheet.cell(row=start_row, column=2).value = sub_menu
-    current_sheet.cell(row=start_row, column=3).value = testcase
-    current_sheet.cell(row=start_row, column=4).value = status
-    current_sheet.cell(row=start_row, column=5).value = description
-    current_sheet.cell(row=start_row, column=6).value = objects.date_time
-    current_sheet.cell(row=start_row, column=7).value = tester
-
-    # Apply color for status: Pass/Fail
-    passFill = PatternFill(start_color='b6d7a8',
-                   end_color='b6d7a8',
-                   fill_type='solid',)
-    failFill = PatternFill(start_color='ea9999',
-                   end_color='ea9999',
-                   fill_type='solid')
-    if status == "Pass":
-        Logging(objects.testcase_pass)
-        current_sheet.cell(row=start_row, column=4).fill = passFill
-    else:
-        Logging(objects.testcase_fail)
-        current_sheet.cell(row=start_row, column=4).fill = failFill
-    wb.save(testcase_log)
-
-def ValidateFailResultAndSystem(fail_msg):
-    Logging(fail_msg)
-    append_fail_result = open(fail_log, "a")
-    append_fail_result.write("[FAILED TEST CASE] " + str(fail_msg) + "\n")
-    append_fail_result.close()
 
 def execution():
     Logging("------- Login to app -------")
@@ -266,14 +144,28 @@ def clock_out():
         Logging("=> Crash app")
 
 def view_calendar():
-    WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, data["calender_home"]["date"]))).click()
+    Wait10s_ClickElement(data["calender_home"]["date"])
     Logging("- Select calender")
+    Wait10s_ClickElement(data["calender_home"]["date_to_view"])
+    Wait10s_ClickElement(data["calender_home"]["select"])
+    Logging("- Select date")
+
+    popup = WaitElementLoaded(20, data["calender_home"]["popup_warning"])
+    if popup == "Warning":
+        Logging("- Date select not worked day -> Select again")
+    else:
+        Logging("- Date correct")
+
+    Wait10s_ClickElement(data["calender_home"]["preview_date"])
+    Logging("- View preview date")
+    Wait10s_ClickElement(data["calender_home"]["next_date"])
+    Logging("- View next date")
 
 def view_noti():
     Logging("--- View Notification ---")
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_notification"]))).click()
+    Wait10s_ClickElement(data["menu_settings"]["button_notification"])
     Logging("- View content notification")
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_back"]))).click()
+    Wait10s_ClickElement(data["menu_settings"]["button_back"])
     Logging("-> Back to menu")
 
 def settings():
@@ -376,7 +268,6 @@ def add_event():
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["memo"]))).send_keys(data["event"]["memo_text"])
         Logging("- Input memo")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["button_save"]))).click()
-        TesCase_LogResult(**data["testcase_result"]["timecard"]["event"]["pass"])
     except:
         Logging("- Can't create event")
 
@@ -413,6 +304,50 @@ def request_vacation():
         Logging("Save request")
     except:
         Logging("-> Can't request vacation")
+
+def admin_settings_GPS():
+    Wait10s_ClickElement(data["menu_admin"]["button_admin"])
+    Logging("- Admin settings")
+
+    Wait10s_ClickElement(data["menu_admin"]["GPS_setting"])
+    Logging("- GPS Settings")
+    Wait10s_ClickElement(data["menu_admin"]["add_GPS"])
+    Wait10s_ClickElement(data["menu_admin"]["popup"])
+    Logging("- Add GPS")
+    Wait10s_ClickElement(data["menu_admin"]["search_gps"])
+    Logging("- Input GPS")
+    InputElement(data["menu_admin"]["search_gps"], "Nguyen")
+    Logging("- Enter value")
+    Wait10s_ClickElement(data["menu_admin"]["done"])
+    Wait10s_ClickElement(data["menu_admin"]["gps"])
+    Logging("- Select GPS")
+    Wait10s_ClickElement(data["menu_admin"]["workplace"])
+    Wait10s_ClickElement(data["menu_admin"]["select_workplace"])
+    Logging("- Select workplace")
+    Wait10s_ClickElement(data["menu_admin"]["save_GPS"])
+    Wait10s_ClickElement(data["menu_admin"]["close_popup"])
+    Logging("- Save GPS")
+
+    driver.swipe(start_x=1000, start_y=450, end_x=500, end_y=450, duration=800)
+    Wait10s_ClickElement(data["menu_admin"]["delete_gps"])
+    Wait10s_ClickElement(data["menu_admin"]["button_yes"])
+    Logging("- Delete GPS")
+    Wait10s_ClickElement(data["menu_admin"]["close_popup"])
+
+def admin_settings_wifi():
+    Wait10s_ClickElement(data["menu_admin"]["back_button"])
+    Wait10s_ClickElement(data["menu_admin"]["Wifi_setting"])
+    Logging("- Wifi Settings")
+    Wait10s_ClickElement(data["menu_admin"]["add_wifi"])
+    Logging("- Add Wifi")
+
+def admin_settings_beacon():
+    Wait10s_ClickElement(data["menu_admin"]["back_button"])
+    Wait10s_ClickElement(data["menu_admin"]["Beacon_setting"])
+    Logging("- Beacon Settings")
+    Wait10s_ClickElement(data["menu_admin"]["add_Beacon"])
+    Logging("- Add Beacon")
+
 
 
 Logging("Như Quỳnh")
