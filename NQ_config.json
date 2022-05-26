@@ -100,7 +100,9 @@
         "calendar": "",
         "select_date": "",
 
-        "list_tab": "",
+        "list_tab":{
+            "sort": ""
+        },
         "calendar_tab": "",
 
         "report_tab":{

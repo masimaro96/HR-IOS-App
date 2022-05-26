@@ -249,9 +249,9 @@ def add_event():
     try:
         Logging(" ")
         Logging("------- Add event -------")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timecard"]))).click()
+        Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
         Logging("- Select time card")
-        WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timesheet"]))).click()
+        Wait10s_ClickElement(data["menu_timecard"]["button_timesheet"])
         Logging("- Select time sheet")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["add_event"]))).click()
         Logging("- Select add")
@@ -347,6 +347,110 @@ def admin_settings_beacon():
     Logging("- Beacon Settings")
     Wait10s_ClickElement(data["menu_admin"]["add_Beacon"])
     Logging("- Add Beacon")
+
+def TC_timesheet():
+    Logging("------- Check menu crash - TimeCard -------")
+    Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
+    Logging("- Select time card")
+    Wait10s_ClickElement(data["menu_timecard"]["button_timesheet"])
+    Logging("- Select time sheet")
+
+    Wait10s_ClickElement(data["menu_timecard"]["list"])
+    Logging("- Tab List")
+    time.sleep(5)
+
+    # Check calendar crash
+    Wait10s_ClickElement(data["menu_timecard"]["calendar_next"])
+    Logging("- View next month")   
+    time.sleep(5)
+    Wait10s_ClickElement(data["menu_timecard"]["calendar_prev"])
+    Logging("- View preview month")
+    time.sleep(5)
+    Wait10s_ClickElement(data["menu_timecard"]["calendar"])
+    Wait10s_ClickElement(data["menu_timecard"]["select_date"])
+    Logging("- Select date from calendar")
+    time.sleep(5)
+
+    list_sort_by = Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["sort"])
+    Logging("- Sort by")
+    time.sleep(2)
+    list_week = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["list_sort"])))
+    if list_week.is_displayed():
+        Logging("- Show list week")
+    else:
+        Logging("=> Crash app")
+        exit(0)
+    time.sleep(5)
+
+    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_2"])
+    Logging("- 2nd Week")
+    time.sleep(5)
+        
+    total_week_1 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_2_text"])))
+    if total_week_1.text == 'TOTAL OF 2ND WEEK':
+        Logging("=> TOTAL OF 2ND WEEK")
+    else:
+        Logging("=> Crash app")
+        exit(0)
+    time.sleep(5)
+
+    list_sort_by.click
+    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_3"])
+    Logging("- 3rd Week")
+    time.sleep(5)
+
+    total_week_2 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_3_text"])))
+    if total_week_2.text == 'TOTAL OF 3RD WEEK':
+        Logging("=> TOTAL OF 3RD WEEK")
+    else:
+        Logging("=> Crash app")
+        exit(0)
+    time.sleep(5)
+
+    list_sort_by.click
+    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_4"])
+    Logging("- 4th Week")
+    time.sleep(5)
+    total_week_3 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_4_text"])))
+    if total_week_3.text == 'TOTAL OF 4TH WEEK':
+        Logging("=> TOTAL OF 4TH WEEK")
+    else:
+        Logging("=> Crash app")
+        exit(0)
+    time.sleep(5)
+        
+    list_sort_by.click
+    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_5"])
+    Logging("- 5th Week")
+    time.sleep(5)
+    total_week_4 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_5_text"])))
+    if total_week_4.text == 'TOTAL OF 5TH WEEK':
+        Logging("=> TOTAL OF 5TH WEEK")
+    else:
+        Logging("=> Crash app")
+        exit(0)
+    time.sleep(5)
+        
+    Logging(" ")
+    Logging("- Timesheet - Calendar -")
+    Wait10s_ClickElement(data["menu_timecard"]["tab_calendar"])
+    Logging("- Tab Calendar")
+    time.sleep(5)
+
+    # Check calendar crash
+    Wait10s_ClickElement(data["menu_timecard"]["calendar_next"])
+    Logging("- View next month")   
+    time.sleep(5)
+    Wait10s_ClickElement(data["menu_timecard"]["calendar_prev"])
+    Logging("- View preview month")
+    time.sleep(5)
+    Wait10s_ClickElement(data["menu_timecard"]["calendar"])
+    Wait10s_ClickElement(data["menu_timecard"]["select_date"])
+    Logging("- Select date from calendar")
+    time.sleep(5)
+
+    
+    driver.find_element_by_xpath(data["event"]["timecard"]).click()
 
 
 
