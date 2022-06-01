@@ -71,42 +71,43 @@ def execution():
 
     add_event()
 
-
 def clock_in():
+    reason_OT = data["OT"]["reason_text"]
+    reason_late = data["clock_in"]["reason_late_text"]
     try:
         Logging("--- Clock in with GPS ---")
         try:
-            OT = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["OT"]["status_OT"])))        
+            OT = Waits.Wait10s_ElementInvisibility(data["OT"]["status_OT"])   
             if OT.text == 'Night shift':
                 Logging("=> Work night shift")
-                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["OT"]["confirm_OT"]))).click()
-                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["OT"]["apply_OT"]))).click()
+                Commands.Wait10s_ClickElement(data["OT"]["confirm_OT"])
+                Commands.Wait10s_ClickElement(data["OT"]["apply_OT"])
                 Logging("=> Confirm OT")
 
-                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["OT"]["reason_OT"]))).send_keys(data["OT"]["reason_text"])
+                Commands.Wait10s_InputElement(data["OT"]["reason_OT"], reason_OT)
                 Logging("=> Input reason OT")
 
-                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["OT"]["confirm_apply_OT"]))).click()
-                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["OT"]["button_close"]))).click()
+                Commands.Wait10s_ClickElement(data["OT"]["confirm_apply_OT"])
+                Commands.Wait10s_ClickElement(data["OT"]["button_close"])
                 Logging("=> Apply OT success")
             else:
                 Logging("=> Apply OT not display")
         except WebDriverException:
             Logging("=> Apply OT not display")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_in"]["button_clock_in"]))).click()
+        Commands.Wait10s_ClickElement(data["clock_in"]["button_clock_in"])
         Logging("=> Click clock in")
 
-        status_clock_in= WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_in"]["status_late"])))
+        status_clock_in= Waits.Wait10s_ElementInvisibility(data["clock_in"]["status_late"])
         if status_clock_in.text == 'Tardiness':
             Logging("=> Clock in late")
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_in"]["reason_late"]))).send_keys(data["clock_in"]["reason_late_text"])
+            Commands.Wait10s_InputElement(data["clock_in"]["reason_late"], reason_late)
             Logging("=> Input reason late")
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_in"]["button_save"]))).click()
+            Commands.Wait10s_ClickElement(data["clock_in"]["button_save"])
             Logging("=> Save")
         else:
             Logging("=> Clock in on time")
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_in"]["button_close"]))).click()
+            Commands.Wait10s_ClickElement(data["clock_in"]["button_close"])
 
     except WebDriverException:
         Logging("=> Crash app")
@@ -114,32 +115,33 @@ def clock_in():
 def break_time():
     try:
         Logging("--- Break time ---")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["break_time"]["button_break_time"]))).click()
+        Commands.Wait10s_ClickElement(data["break_time"]["button_break_time"])
         Logging("=> Start break time")
         time.sleep(30)
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["break_time"]["end_break_time"]))).click()
+        Commands.Wait10s_ClickElement(data["break_time"]["end_break_time"])
         Logging("=> End Breake time")
         time.sleep(10)
     except WebDriverException:
         Logging("=> User have clock out")
 
 def clock_out():
+    reason_key = data["clock_out"]["reason_clock_out_text"]
     try:
         Logging("--- Clock out ---")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_out"]["button_clock_out"]))).click()
+        Commands.Wait10s_ClickElement(data["clock_out"]["button_clock_out"])
         Logging("=> Click clock out")
 
-        status = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_out"]["status_clock_out"])))
+        status = Waits.Wait10s_ElementInvisibility(data["clock_out"]["status_clock_out"])
         if status.text == 'Leave Early':
             Logging("=> Clock out early")
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_out"]["reason_clock_out"]))).send_keys(data["clock_out"]["reason_clock_out_text"])
+            Commands.Wait10s_InputElement(data["clock_out"]["reason_clock_out"], reason_key)
             Logging("=> Input reason")
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_out"]["confirm_clock_out"]))).click()
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_out"]["clock_out_success"]))).click()
+            Commands.Wait10s_ClickElement(data["clock_out"]["confirm_clock_out"])
+            Commands.Wait10s_ClickElement(data["clock_out"]["clock_out_success"])
             Logging("=> Clock out success")
         else:
             Logging("=> Clock out on time")
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["clock_out"]["button_close"]))).click()
+            Commands.Wait10s_ClickElement(data["clock_out"]["button_close"])
     except WebDriverException:
         Logging("=> Crash app")
 
@@ -171,72 +173,72 @@ def view_noti():
 def settings():
     try:
         Logging("--- Settings - Change language ---")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='한국어']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='닫기']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
+        Commands.Wait10s_ClickElement("//*[@text='한국어']")
+        Commands.Wait10s_ClickElement("//*[@text='닫기']")
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
         
-        korean_text = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        korean_text = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
         if korean_text.text == '한국어':
             Logging("=> Change to language '한국어' success")
         else:
             Logging("=> Fail")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='언어 설정']"))).click()
+        Commands.Wait10s_ClickElement("//*[@text='언어 설정']")
         
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Tiếng Việt']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Đóng']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        Commands.Wait10s_ClickElement("//*[@text='Tiếng Việt']")
+        Commands.Wait10s_ClickElement("//*[@text='Đóng']")
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        VN_text = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        VN_text = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
         if VN_text.text == 'Tiếng Việt':
             Logging("=> Change to language 'Tiếng Việt' success")
         else:
             Logging("=> Fail")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Thay đổi ngôn ngữ']"))).click()
+        Commands.Wait10s_ClickElement("//*[@text='Thay đổi ngôn ngữ']")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='日本語']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='閉じる']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        Commands.Wait10s_ClickElement("//*[@text='日本語']")
+        Commands.Wait10s_ClickElement("//*[@text='閉じる']")
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        JP = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        JP = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
         if JP.text == '日本語':
             Logging("=> Change to language '日本語' success")
         else:
             Logging("=> Fail")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='言語']"))).click()
+        Commands.Wait10s_ClickElement("//*[@text='言語']")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='简体中文']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='關閉']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        Commands.Wait10s_ClickElement("//*[@text='简体中文']")
+        Commands.Wait10s_ClickElement("//*[@text='關閉']")
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        TQ = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        TQ = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
         if TQ.text == '简体中文':
             Logging("=> Change to language '简体中文' success")
         else:
             Logging("=> Fail")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='語言']"))).click()
+        Commands.Wait10s_ClickElement("//*[@text='語言']")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Indonesian']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Tutup']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
+        Commands.Wait10s_ClickElement("//*[@text='Indonesian']")
+        Commands.Wait10s_ClickElement("//*[@text='Tutup']")
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        indo = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        indo = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
         if indo.text == 'Indonesian':
             Logging("=> Change to language 'Indonesian' success")
         else:
             Logging("=> Fail")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Ganti BAHASA']"))).click()
+        Commands.Wait10s_ClickElement("//*[@text='Ganti BAHASA']")
 
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='English']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@text='Close']"))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_settings"]["button_settings"]))).click()
-        EN = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["settings"]["language_text"])))
+        Commands.Wait10s_ClickElement("//*[@text='English']")
+        Commands.Wait10s_ClickElement("//*[@text='Close']")
+        Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
+        EN = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
         if EN.text == 'English':
             Logging("=> Change to language 'English' success")
         else:
@@ -246,34 +248,37 @@ def settings():
         Logging("=> Crash app")
 
 def add_event():
+    title = data["event"]["title_text"]
+    location = data["event"]["location_text"]
+    memo = data["event"]["memo_text"]
     try:
         Logging(" ")
         Logging("------- Add event -------")
-        Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
+        Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
         Logging("- Select time card")
-        Wait10s_ClickElement(data["menu_timecard"]["button_timesheet"])
+        Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timesheet"])
         Logging("- Select time sheet")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["add_event"]))).click()
+        Commands.Wait10s_ClickElement(data["event"]["add_event"])
         Logging("- Select add")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[contains(@text,'Please input data.')]"))).send_keys(data["event"]["title_text"])
+        Commands.Wait10s_InputElement("//*[contains(@text,'Please input data.')]", title)
         Logging("- Input title")
         time.sleep(5)
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["choose_event"]))).click()
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["type_event"]))).click()
+        Commands.Wait10s_ClickElement(data["event"]["choose_event"])
+        Commands.Wait10s_ClickElement(data["event"]["type_event"])
         Logging("- Choose event")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["select_color"]))).click()
+        Commands.Wait10s_ClickElement(data["event"]["select_color"])
         Logging("- Select color")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["place"]))).send_keys(data["event"]["location_text"])
+        Commands.Wait10s_InputElement(data["event"]["place"], location)
         Logging("- Input location")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["memo"]))).send_keys(data["event"]["memo_text"])
+        Commands.Wait10s_InputElement(data["event"]["memo"], memo)
         Logging("- Input memo")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["button_save"]))).click()
+        Commands.Wait10s_ClickElement(data["event"]["button_save"])
     except:
         Logging("- Can't create event")
 
     Logging("** Check event use approval type")
     try:
-        approval_type = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["event"]["popup"])))
+        approval_type = Waits.Wait10s_ElementInvisibility(data["event"]["popup"])
         if approval_type.text == '[Approved] Your request approval request has been approved automatically':
             Logging("=> Use approval type: Automatic approval")
 
@@ -297,84 +302,84 @@ def add_event():
 def request_vacation():
     try:
         Logging("-- Request vacation--")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["button_timecard"]))).click()
-        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, data["vacation"]["button_vacation"]))).click()
+        Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
+        Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
         Logging("- Request Vacation")
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["request_vacation"]))).click()
+        Commands.Wait10s_ClickElement(data["menu_timecard"]["request_vacation"])
         Logging("Save request")
     except:
         Logging("-> Can't request vacation")
 
 def admin_settings_GPS():
-    Wait10s_ClickElement(data["menu_admin"]["button_admin"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["button_admin"])
     Logging("- Admin settings")
 
-    Wait10s_ClickElement(data["menu_admin"]["GPS_setting"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["GPS_setting"])
     Logging("- GPS Settings")
-    Wait10s_ClickElement(data["menu_admin"]["add_GPS"])
-    Wait10s_ClickElement(data["menu_admin"]["popup"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["add_GPS"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["popup"])
     Logging("- Add GPS")
-    Wait10s_ClickElement(data["menu_admin"]["search_gps"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["search_gps"])
     Logging("- Input GPS")
-    InputElement(data["menu_admin"]["search_gps"], "Nguyen")
+    Commands.InputElement(data["menu_admin"]["search_gps"], "Nguyen")
     Logging("- Enter value")
-    Wait10s_ClickElement(data["menu_admin"]["done"])
-    Wait10s_ClickElement(data["menu_admin"]["gps"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["done"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["gps"])
     Logging("- Select GPS")
-    Wait10s_ClickElement(data["menu_admin"]["workplace"])
-    Wait10s_ClickElement(data["menu_admin"]["select_workplace"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["workplace"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["select_workplace"])
     Logging("- Select workplace")
-    Wait10s_ClickElement(data["menu_admin"]["save_GPS"])
-    Wait10s_ClickElement(data["menu_admin"]["close_popup"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["save_GPS"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["close_popup"])
     Logging("- Save GPS")
 
     driver.swipe(start_x=1000, start_y=450, end_x=500, end_y=450, duration=800)
-    Wait10s_ClickElement(data["menu_admin"]["delete_gps"])
-    Wait10s_ClickElement(data["menu_admin"]["button_yes"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["delete_gps"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["button_yes"])
     Logging("- Delete GPS")
-    Wait10s_ClickElement(data["menu_admin"]["close_popup"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["close_popup"])
 
 def admin_settings_wifi():
-    Wait10s_ClickElement(data["menu_admin"]["back_button"])
-    Wait10s_ClickElement(data["menu_admin"]["Wifi_setting"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["back_button"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["Wifi_setting"])
     Logging("- Wifi Settings")
-    Wait10s_ClickElement(data["menu_admin"]["add_wifi"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["add_wifi"])
     Logging("- Add Wifi")
 
 def admin_settings_beacon():
-    Wait10s_ClickElement(data["menu_admin"]["back_button"])
-    Wait10s_ClickElement(data["menu_admin"]["Beacon_setting"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["back_button"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["Beacon_setting"])
     Logging("- Beacon Settings")
-    Wait10s_ClickElement(data["menu_admin"]["add_Beacon"])
+    Commands.Wait10s_ClickElement(data["menu_admin"]["add_Beacon"])
     Logging("- Add Beacon")
 
 def TC_timesheet():
     Logging("------- Check menu crash - TimeCard -------")
-    Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
     Logging("- Select time card")
-    Wait10s_ClickElement(data["menu_timecard"]["button_timesheet"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timesheet"])
     Logging("- Select time sheet")
 
-    Wait10s_ClickElement(data["menu_timecard"]["list"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["list"])
     Logging("- Tab List")
     time.sleep(5)
 
     # Check calendar crash
-    Wait10s_ClickElement(data["menu_timecard"]["calendar_next"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["calendar_next"])
     Logging("- View next month")   
     time.sleep(5)
-    Wait10s_ClickElement(data["menu_timecard"]["calendar_prev"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["calendar_prev"])
     Logging("- View preview month")
     time.sleep(5)
-    Wait10s_ClickElement(data["menu_timecard"]["calendar"])
-    Wait10s_ClickElement(data["menu_timecard"]["select_date"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["calendar"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["select_date"])
     Logging("- Select date from calendar")
     time.sleep(5)
 
-    list_sort_by = Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["sort"])
+    list_sort_by = Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["sort"])
     Logging("- Sort by")
     time.sleep(2)
-    list_week = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["list_sort"])))
+    list_week = Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["list_sort"])
     if list_week.is_displayed():
         Logging("- Show list week")
     else:
@@ -382,11 +387,11 @@ def TC_timesheet():
         exit(0)
     time.sleep(5)
 
-    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_2"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_2"])
     Logging("- 2nd Week")
     time.sleep(5)
         
-    total_week_1 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_2_text"])))
+    total_week_1 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_2_text"])
     if total_week_1.text == 'TOTAL OF 2ND WEEK':
         Logging("=> TOTAL OF 2ND WEEK")
     else:
@@ -395,11 +400,11 @@ def TC_timesheet():
     time.sleep(5)
 
     list_sort_by.click
-    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_3"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_3"])
     Logging("- 3rd Week")
     time.sleep(5)
 
-    total_week_2 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_3_text"])))
+    total_week_2 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_3_text"])
     if total_week_2.text == 'TOTAL OF 3RD WEEK':
         Logging("=> TOTAL OF 3RD WEEK")
     else:
@@ -408,10 +413,10 @@ def TC_timesheet():
     time.sleep(5)
 
     list_sort_by.click
-    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_4"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_4"])
     Logging("- 4th Week")
     time.sleep(5)
-    total_week_3 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_4_text"])))
+    total_week_3 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_4_text"])
     if total_week_3.text == 'TOTAL OF 4TH WEEK':
         Logging("=> TOTAL OF 4TH WEEK")
     else:
@@ -420,10 +425,10 @@ def TC_timesheet():
     time.sleep(5)
         
     list_sort_by.click
-    Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_5"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_5"])
     Logging("- 5th Week")
     time.sleep(5)
-    total_week_4 = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, data["menu_timecard"]["list_tab"]["week_5_text"])))
+    total_week_4 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_5_text"])
     if total_week_4.text == 'TOTAL OF 5TH WEEK':
         Logging("=> TOTAL OF 5TH WEEK")
     else:
@@ -433,24 +438,116 @@ def TC_timesheet():
         
     Logging(" ")
     Logging("- Timesheet - Calendar -")
-    Wait10s_ClickElement(data["menu_timecard"]["tab_calendar"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["tab_calendar"])
     Logging("- Tab Calendar")
     time.sleep(5)
 
     # Check calendar crash
-    Wait10s_ClickElement(data["menu_timecard"]["calendar_next"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["calendar_next"])
     Logging("- View next month")   
     time.sleep(5)
-    Wait10s_ClickElement(data["menu_timecard"]["calendar_prev"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["calendar_prev"])
     Logging("- View preview month")
     time.sleep(5)
-    Wait10s_ClickElement(data["menu_timecard"]["calendar"])
-    Wait10s_ClickElement(data["menu_timecard"]["select_date"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["calendar"])
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["select_date"])
     Logging("- Select date from calendar")
     time.sleep(5)
 
-    
-    driver.find_element_by_xpath(data["event"]["timecard"]).click()
+def TC_report():
+    try:
+        driver.find_element_by_xpath(data["event"]["timecard"]).click()
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report_monthly"]["MT_report"])
+        Logging("- Schedule Working")
+        time.sleep(10)
+
+        schedule = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["schedule_working"])
+        if schedule.text == 'Scheduled working day':
+            count_day = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["count_schedule_working"])
+            Logging("- Scheduled working day:", count_day.text)
+        else:
+            Logging("=> Crash app")
+            exit(0)
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report_monthly"]["events"])
+        Logging("- Events")
+        time.sleep(5)
+        clock_in = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["clockin"])
+        if clock_in.text == 'Clock-In':
+            count_clock_in = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["count_clockin"])
+            Logging("- Events - Clock in:", count_clock_in.text)
+        else:
+            Logging("=> Crash app")
+            exit(0)
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report_monthly"]["working_status"])
+        Logging("- Working status")
+        time.sleep(5)
+        working_time = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["workingtime"])
+        if working_time.text == 'Working time':
+            count_working_time = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["count_workingtime"])
+            Logging("- Working status - Working time:", count_working_time.text)
+        else:
+            Logging("=> Crash app")
+            exit(0)
+        time.sleep(5)
+
+        Logging("** Check report - Weekly")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report_weekly"]["weekly"])
+        Logging("- View week tab")
+        time.sleep(10)
+
+        Commands.Wait10s_ClickElement("//*[@text='Device']")
+        Logging("- View tab device")
+        time.sleep(5)
+
+        driver.swipe(start_x=1174, start_y=730, end_x=400, end_y=730, duration=800)
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement("//*[@text='Average working hour per week']")
+        Logging("- View tab Avg_Working")
+        time.sleep(5)
+        driver.swipe(start_x=1174, start_y=730, end_x=400, end_y=730, duration=800)
+
+        Commands.Wait10s_ClickElement("//*[@text='Working hours per day of the week']")
+        Logging("- View tab working hour")
+        time.sleep(5)
+        
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["next"])
+        Logging("- View next date")   
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["prev"])
+        Logging("- View preview date")
+        time.sleep(5)
+        
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["calendar_select"])
+        Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=9]")
+        Logging("- Select date from calendar")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_list"]["select_date"])
+        time.sleep(5)
+
+        Logging("** Check report - List")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report_list"]["list"])
+        Logging("- View list tab")
+        time.sleep(10)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["next"])
+        Logging("- View next date")   
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["prev"])
+        Logging("- View preview date")
+        time.sleep(5)
+        
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["calendar_select"])
+        Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=9]")
+        Logging("- Select date from calendar")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_list"]["select_date"])
+        time.sleep(5)
+    except:
+        Logging("-> Crash app")
 
 
 
