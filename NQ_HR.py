@@ -77,7 +77,7 @@ def clock_in():
     try:
         Logging("--- Clock in with GPS ---")
         try:
-            OT = Waits.Wait10s_ElementInvisibility(data["OT"]["status_OT"])   
+            OT = Waits.Wait10s_ElementLoaded(data["OT"]["status_OT"])   
             if OT.text == 'Night shift':
                 Logging("=> Work night shift")
                 Commands.Wait10s_ClickElement(data["OT"]["confirm_OT"])
@@ -98,7 +98,7 @@ def clock_in():
         Commands.Wait10s_ClickElement(data["clock_in"]["button_clock_in"])
         Logging("=> Click clock in")
 
-        status_clock_in= Waits.Wait10s_ElementInvisibility(data["clock_in"]["status_late"])
+        status_clock_in= Waits.Wait10s_ElementLoaded(data["clock_in"]["status_late"])
         if status_clock_in.text == 'Tardiness':
             Logging("=> Clock in late")
             Commands.Wait10s_InputElement(data["clock_in"]["reason_late"], reason_late)
@@ -131,7 +131,7 @@ def clock_out():
         Commands.Wait10s_ClickElement(data["clock_out"]["button_clock_out"])
         Logging("=> Click clock out")
 
-        status = Waits.Wait10s_ElementInvisibility(data["clock_out"]["status_clock_out"])
+        status = Waits.Wait10s_ElementLoaded(data["clock_out"]["status_clock_out"])
         if status.text == 'Leave Early':
             Logging("=> Clock out early")
             Commands.Wait10s_InputElement(data["clock_out"]["reason_clock_out"], reason_key)
@@ -146,28 +146,28 @@ def clock_out():
         Logging("=> Crash app")
 
 def view_calendar():
-    Wait10s_ClickElement(data["calender_home"]["date"])
+    Commands.Wait10s_ClickElement(data["calender_home"]["date"])
     Logging("- Select calender")
-    Wait10s_ClickElement(data["calender_home"]["date_to_view"])
-    Wait10s_ClickElement(data["calender_home"]["select"])
+    Commands.Wait10s_ClickElement(data["calender_home"]["date_to_view"])
+    Commands. Wait10s_ClickElement(data["calender_home"]["select"])
     Logging("- Select date")
 
-    popup = WaitElementLoaded(20, data["calender_home"]["popup_warning"])
+    popup = Waits.WaitElementLoaded(20, data["calender_home"]["popup_warning"])
     if popup == "Warning":
         Logging("- Date select not worked day -> Select again")
     else:
         Logging("- Date correct")
 
-    Wait10s_ClickElement(data["calender_home"]["preview_date"])
+    Commands.Wait10s_ClickElement(data["calender_home"]["preview_date"])
     Logging("- View preview date")
-    Wait10s_ClickElement(data["calender_home"]["next_date"])
+    Commands.Wait10s_ClickElement(data["calender_home"]["next_date"])
     Logging("- View next date")
 
 def view_noti():
     Logging("--- View Notification ---")
-    Wait10s_ClickElement(data["menu_settings"]["button_notification"])
+    Commands.Wait10s_ClickElement(data["menu_settings"]["button_notification"])
     Logging("- View content notification")
-    Wait10s_ClickElement(data["menu_settings"]["button_back"])
+    Commands.Wait10s_ClickElement(data["menu_settings"]["button_back"])
     Logging("-> Back to menu")
 
 def settings():
@@ -179,7 +179,7 @@ def settings():
         Commands.Wait10s_ClickElement("//*[@text='닫기']")
         Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
         
-        korean_text = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
+        korean_text = Waits.Wait10s_ElementLoaded(data["settings"]["language_text"])
         if korean_text.text == '한국어':
             Logging("=> Change to language '한국어' success")
         else:
@@ -191,7 +191,7 @@ def settings():
         Commands.Wait10s_ClickElement("//*[@text='Đóng']")
         Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        VN_text = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
+        VN_text = Waits.Wait10s_ElementLoaded(data["settings"]["language_text"])
         if VN_text.text == 'Tiếng Việt':
             Logging("=> Change to language 'Tiếng Việt' success")
         else:
@@ -203,7 +203,7 @@ def settings():
         Commands.Wait10s_ClickElement("//*[@text='閉じる']")
         Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        JP = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
+        JP = Waits.Wait10s_ElementLoaded(data["settings"]["language_text"])
         if JP.text == '日本語':
             Logging("=> Change to language '日本語' success")
         else:
@@ -215,7 +215,7 @@ def settings():
         Commands.Wait10s_ClickElement("//*[@text='關閉']")
         Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        TQ = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
+        TQ = Waits.Wait10s_ElementLoaded(data["settings"]["language_text"])
         if TQ.text == '简体中文':
             Logging("=> Change to language '简体中文' success")
         else:
@@ -227,7 +227,7 @@ def settings():
         Commands.Wait10s_ClickElement("//*[@text='Tutup']")
         Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
 
-        indo = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
+        indo = Waits.Wait10s_ElementLoaded(data["settings"]["language_text"])
         if indo.text == 'Indonesian':
             Logging("=> Change to language 'Indonesian' success")
         else:
@@ -238,7 +238,7 @@ def settings():
         Commands.Wait10s_ClickElement("//*[@text='English']")
         Commands.Wait10s_ClickElement("//*[@text='Close']")
         Commands.Wait10s_ClickElement(data["menu_settings"]["button_settings"])
-        EN = Waits.Wait10s_ElementInvisibility(data["settings"]["language_text"])
+        EN = Waits.Wait10s_ElementLoaded(data["settings"]["language_text"])
         if EN.text == 'English':
             Logging("=> Change to language 'English' success")
         else:
@@ -278,7 +278,7 @@ def add_event():
 
     Logging("** Check event use approval type")
     try:
-        approval_type = Waits.Wait10s_ElementInvisibility(data["event"]["popup"])
+        approval_type = Waits.Wait10s_ElementLoaded(data["event"]["popup"])
         if approval_type.text == '[Approved] Your request approval request has been approved automatically':
             Logging("=> Use approval type: Automatic approval")
 
@@ -391,7 +391,7 @@ def TC_timesheet():
     Logging("- 2nd Week")
     time.sleep(5)
         
-    total_week_1 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_2_text"])
+    total_week_1 = Waits.Wait10s_ElementLoaded(data["menu_timecard"]["list_tab"]["week_2_text"])
     if total_week_1.text == 'TOTAL OF 2ND WEEK':
         Logging("=> TOTAL OF 2ND WEEK")
     else:
@@ -404,7 +404,7 @@ def TC_timesheet():
     Logging("- 3rd Week")
     time.sleep(5)
 
-    total_week_2 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_3_text"])
+    total_week_2 = Waits.Wait10s_ElementLoaded(data["menu_timecard"]["list_tab"]["week_3_text"])
     if total_week_2.text == 'TOTAL OF 3RD WEEK':
         Logging("=> TOTAL OF 3RD WEEK")
     else:
@@ -416,7 +416,7 @@ def TC_timesheet():
     Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_4"])
     Logging("- 4th Week")
     time.sleep(5)
-    total_week_3 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_4_text"])
+    total_week_3 = Waits.Wait10s_ElementLoaded(data["menu_timecard"]["list_tab"]["week_4_text"])
     if total_week_3.text == 'TOTAL OF 4TH WEEK':
         Logging("=> TOTAL OF 4TH WEEK")
     else:
@@ -428,7 +428,7 @@ def TC_timesheet():
     Commands.Wait10s_ClickElement(data["menu_timecard"]["list_tab"]["week_5"])
     Logging("- 5th Week")
     time.sleep(5)
-    total_week_4 = Waits.Wait10s_ElementInvisibility(data["menu_timecard"]["list_tab"]["week_5_text"])
+    total_week_4 = Waits.Wait10s_ElementLoaded(data["menu_timecard"]["list_tab"]["week_5_text"])
     if total_week_4.text == 'TOTAL OF 5TH WEEK':
         Logging("=> TOTAL OF 5TH WEEK")
     else:
@@ -461,9 +461,9 @@ def TC_report():
         Logging("- Schedule Working")
         time.sleep(10)
 
-        schedule = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["schedule_working"])
+        schedule = Waits.Wait10s_ElementLoaded(data["TimeCard"]["report_monthly"]["schedule_working"])
         if schedule.text == 'Scheduled working day':
-            count_day = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["count_schedule_working"])
+            count_day = Waits.Wait10s_ElementLoaded(data["TimeCard"]["report_monthly"]["count_schedule_working"])
             Logging("- Scheduled working day:", count_day.text)
         else:
             Logging("=> Crash app")
@@ -473,9 +473,9 @@ def TC_report():
         Commands.Wait10s_ClickElement(data["TimeCard"]["report_monthly"]["events"])
         Logging("- Events")
         time.sleep(5)
-        clock_in = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["clockin"])
+        clock_in = Waits.Wait10s_ElementLoaded(data["TimeCard"]["report_monthly"]["clockin"])
         if clock_in.text == 'Clock-In':
-            count_clock_in = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["count_clockin"])
+            count_clock_in = Waits.Wait10s_ElementLoaded(data["TimeCard"]["report_monthly"]["count_clockin"])
             Logging("- Events - Clock in:", count_clock_in.text)
         else:
             Logging("=> Crash app")
@@ -485,9 +485,9 @@ def TC_report():
         Commands.Wait10s_ClickElement(data["TimeCard"]["report_monthly"]["working_status"])
         Logging("- Working status")
         time.sleep(5)
-        working_time = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["workingtime"])
+        working_time = Waits.Wait10s_ElementLoaded(data["TimeCard"]["report_monthly"]["workingtime"])
         if working_time.text == 'Working time':
-            count_working_time = Waits.Wait10s_ElementInvisibility(data["TimeCard"]["report_monthly"]["count_workingtime"])
+            count_working_time = Waits.Wait10s_ElementLoaded(data["TimeCard"]["report_monthly"]["count_workingtime"])
             Logging("- Working status - Working time:", count_working_time.text)
         else:
             Logging("=> Crash app")
@@ -548,6 +548,232 @@ def TC_report():
         time.sleep(5)
     except:
         Logging("-> Crash app")
+
+def TC_weekly_status():
+    try:
+        Logging(" ")
+        Logging("** Check Company timecard - Weekly Status")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["weekly_status_CT"])
+        time.sleep(5)
+        try:
+            title = Waits.Wait10s_ElementLoaded(mdata["TimeCard"]["weekly_status"]["week_title"])
+            if title.text == 'Weekly Status':
+                Logging("- Show content")
+
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        try:
+            Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["sort_week"])
+            Logging("- Select sort week")
+            sortweek = Waits.Wait10s_ElementLoaded(data["TimeCard"]["weekly_status"]["list"])
+            if sortweek.is_displayed:
+                Logging("- List week display")
+            else:
+                Logging("- List not display")
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        Logging("- Select week")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["week_2"])
+        Logging("- 2nd Week")
+        time.sleep(5)
+        try:
+            user_view = Waits.Wait10s_ElementLoaded(data["TimeCard"]["weekly_status"]["user"])
+            if user_view.is_displayed():
+                Logging("- Show content")
+            else:
+                Logging("- No data")
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["sort_week"])
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["week_3"])
+        Logging("- 3rd Week")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["sort_week"])
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["week_4"])
+        Logging("- 4th Week")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["sort_week"])
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["week_5"])
+        Logging("- 5th Week")
+        time.sleep(5)
+
+        '''Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["sort_week"])
+        time.sleep(5)
+        driver.swipe(start_x=291, start_y=1126, end_x=291, end_y=900, duration=800)
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["week_6"])
+        Logging("- 6th Week")
+        time.sleep(5)'''
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["sort_week"])
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["week_1"])
+        Logging("- 1st Week")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["search"])
+        input_user_name()
+
+        Commands.Wait10s_ClickElement("//*[contains(@text,'quynh1')]")
+        time.sleep(5)
+
+        ''' Next - Prev - Select date '''
+        Commands.Wait10s_ClickElement(data["next"])
+        Logging("- View next date-month")
+        Commands.Wait10s_ClickElement(data["prev"])
+        Logging("- View pre date-month")
+        Commands.Wait10s_ClickElement(data["calendar_select"])
+        time.sleep(5)
+        Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=19]")
+        time.sleep(5)
+        dateselect = Waits.Wait10s_ElementLoaded(data["TimeCard"]["weekly_status"]["date_calendar"])
+        dateselect_text = dateselect.text
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["select_date"])
+        Logging("- Select calendar")
+
+        time.sleep(10)
+
+        try:
+            user_view = Waits.Wait10s_ElementLoaded(data["TimeCard"]["weekly_status"]["user"])
+            if user_view.is_displayed():
+                Logging("- Show content")
+            else:
+                Logging("- No data")
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        
+        Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["view_detail"])
+        Logging("- View detail")
+
+        date_of_calendar = Waits.Wait10s_ElementLoaded(data["TimeCard"]["weekly_status"]["date"])
+        date = date_of_calendar.text
+        x = date.split(" ")[2]
+        a = x.split(",")[0]
+
+        if a == dateselect_text:
+            Logging("- Show right date")
+        else:
+            Logging("- Crash")
+            exit(0)
+    except:
+        Logging("-> Crash app")
+
+    Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["back"])
+
+def TC_timeline():
+    try:
+        Logging(" ")
+        Logging("** Check Company timecard - Time Line")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["timeline_CT"])
+        time.sleep(5)
+        try:
+            title = Waits.Wait10s_ElementLoaded(data["TimeCard"]["timeline"]["timeline_title"])
+            if title.text == 'Time Line':
+                Logging("- Show content")
+
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+
+        ''' Search user '''
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["search"])
+        input_user_name()
+
+        Commands.Wait10s_ClickElement("//*[contains(@text,'quynh1')]")
+        Logging("- Select user")
+        time.sleep(5)
+
+        ''' Next - Prev - Select date '''
+        select_date_month()
+        time.sleep(10)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        Logging("- Sort time line")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["clockin"])
+        Logging("- Clock in")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        Logging("- Sort time line")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["tardin"])
+        Logging("- Tardines")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        Logging("- Sort time line")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["clockout"])
+        Logging("- Clock out")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        Logging("- Sort time line")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["auto_clockout"])
+        Logging("- Automatically Clock-out")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        Logging("- Sort time line")
+        time.sleep(5)
+        driver.swipe(start_x=291, start_y=1315, end_x=291, end_y=691, duration=800)
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["outside"])
+        Logging("- Outside")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        time.sleep(5)
+        driver.swipe(start_x=291, start_y=1315, end_x=291, end_y=691, duration=800)
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["meeting"])
+        Logging("- Meeting")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        time.sleep(5)
+        driver.swipe(start_x=291, start_y=1315, end_x=291, end_y=691, duration=800)
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["edu"])
+        Logging("- Education")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        time.sleep(5)
+        driver.swipe(start_x=291, start_y=1315, end_x=291, end_y=691, duration=800)
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["business"])
+        Logging("- Business Trip")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        time.sleep(5)
+        driver.swipe(start_x=291, start_y=1315, end_x=291, end_y=691, duration=800)
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["working_remote"])
+        Logging("- Working remote")
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["sort_timeline"])
+        time.sleep(5)
+        driver.swipe(start_x=291, start_y=1315, end_x=291, end_y=691, duration=800)
+        driver.swipe(start_x=291, start_y=1315, end_x=291, end_y=691, duration=800)
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["working"])
+        Logging("- Working")
+        time.sleep(5)
+        TesCase_LogResult(**data["testcase_result"]["timecard"]["crash_app_time_line"]["pass"])
+    except:
+        Logging("-> Crash app")
+        TesCase_LogResult(**data["testcase_result"]["timecard"]["crash_app_time_line"]["fail"])
+
+    Commands.Wait10s_ClickElement(data["event"]["timecard"]) 
 
 
 
