@@ -549,14 +549,34 @@ def TC_report():
     except:
         Logging("-> Crash app")
 
-def TC_weekly_status():
+def CP_daily_status():
+    try:
+        Logging(" ")
+        Logging("** Check Company timecard - Daily status")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["next"])
+        Logging("- View next date")   
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["prev"])
+        Logging("- View preview date")
+        time.sleep(5)
+        
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_calendar"]["calendar_select"])
+        Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=9]")
+        Logging("- Select date from calendar")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["timesheet_list"]["select_date"])
+        time.sleep(5)
+    except:
+        Logging("-> Crash app")
+
+def CP_weekly_status():
     try:
         Logging(" ")
         Logging("** Check Company timecard - Weekly Status")
         Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["weekly_status_CT"])
         time.sleep(5)
         try:
-            title = Waits.Wait10s_ElementLoaded(mdata["TimeCard"]["weekly_status"]["week_title"])
+            title = Waits.Wait10s_ElementLoaded(data["TimeCard"]["weekly_status"]["week_title"])
             if title.text == 'Weekly Status':
                 Logging("- Show content")
 
@@ -668,7 +688,7 @@ def TC_weekly_status():
 
     Commands.Wait10s_ClickElement(data["TimeCard"]["weekly_status"]["back"])
 
-def TC_timeline():
+def CP_timeline():
     try:
         Logging(" ")
         Logging("** Check Company timecard - Time Line")
@@ -768,13 +788,195 @@ def TC_timeline():
         Commands.Wait10s_ClickElement(data["TimeCard"]["timeline"]["working"])
         Logging("- Working")
         time.sleep(5)
-        TesCase_LogResult(**data["testcase_result"]["timecard"]["crash_app_time_line"]["pass"])
     except:
         Logging("-> Crash app")
-        TesCase_LogResult(**data["testcase_result"]["timecard"]["crash_app_time_line"]["fail"])
 
     Commands.Wait10s_ClickElement(data["event"]["timecard"]) 
 
+def CP_report():
+    try:
+        Logging(" ")
+        Logging("** Check Company timecard - Report")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["report_CT"])
+        Logging("- View by work")
+        time.sleep(5)
+        try:
+            title = Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["report_title"])
+            if title.text == 'Report':
+                Logging("- Show content")
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+
+        ''' Next - Prev - Select date '''
+        select_date_month()
+        time.sleep(10)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["search"])
+        Logging("- Search user")
+        input_user_name()
+        time.sleep(3)
+        Commands.Wait10s_ClickElement("//*[contains(@text,'quynh1')]")
+        Logging("- Select user")
+        time.sleep(5)
+        
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["detail"])
+        Logging("- View detail")
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["back"])
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["view_by_event"])
+        Logging("- View by event")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["detail"])
+        Logging("- View detail")
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["back"])
+        time.sleep(5)
+    except:
+        Logging("-> Crash app")
+
+    Commands.Wait10s_ClickElement(data["event"]["timecard"])
+
+    try:
+        Logging(" ")
+        Logging("** Check Company timecard - Approval")
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["approval_CT"])
+        time.sleep(5)
+        try:
+            title = Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["approval_title"])
+            if title.text == 'Approval':
+                Logging("- Show content")
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        time.sleep(10)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["filter_type"])
+        Logging("- Filter type")
+        time.sleep(5)
+        try:
+            filter = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["detail"])
+            if filter.text == 'Detail':
+                Logging("-")
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["type"])
+        Logging("- Select type")
+        time.sleep(5)
+        try:
+            type_detail = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["event"])
+            if type_detail.is_displayed():
+                type_detail.click()
+                time.sleep(5)
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["status"])
+        Logging("- Select status")
+        time.sleep(5)
+        try:
+            status = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["pending"])
+            if status.is_displayed():
+                status.click()
+                time.sleep(5)
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+
+        '''Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["peroid"])
+        Logging("- Select peroid")
+        time.sleep(5)
+        try:
+            peroid = WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, data["TimeCard"]["approval"]["today"])
+            if peroid.is_displayed():
+                peroid.click()
+                time.sleep(5)
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        time.sleep(5)'''
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["back"])
+        time.sleep(5)
+        try:
+            title = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["approval_title"])
+            if title.text == 'Approval':
+                Logging("- Show content")
+        except WebDriverException:
+            Logging("=> Crash app")
+            exit(0)
+        time.sleep(5)
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["report"]["search"])
+        
+        input_user_name()
+
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["user"])
+        #WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, "//android.widget.TextView[@text='quynh1']")
+        Logging("- Select user")
+        time.sleep(5)
+
+        ''' Approve '''
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["select"])
+        try:
+            approve_line = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["approval_line"])
+            if approve_line.is_displayed():
+                Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["approve"])
+                time.sleep(5)
+                Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["close"])
+                Logging("- Approve request")
+                time.sleep(5)
+                
+                Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["filter_type"])
+                Logging("- Filter type")
+                time.sleep(5)
+                Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["status"])
+                Logging("- Select status")
+                time.sleep(5)
+                Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["approved"])
+                time.sleep(5)
+
+                Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["back"])
+                time.sleep(5)
+
+                status_approve = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["status_text"])
+                if status_approve.text == 'Approved':
+                    Logging("- Approve success")
+                else:
+                    Logging("- Fail")
+            else:
+                Logging("=> Approve don't have approve permission")
+        except WebDriverException:
+            Logging("=> Approve don't have approve permission")
+
+        ''' Reject '''
+        add_event()
+        Commands.Wait10s_ClickElement(data["event"]["timecard"])
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["approval_CT"])
+        time.sleep(5)
+        Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["select"])
+        try:
+            approve_line = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["approval_line"])
+            if approve_line.is_displayed():
+                Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["reject_bt"])
+                time.sleep(5)
+                Commands.Wait10s_ClickElement(data["TimeCard"]["approval"]["close"])
+                time.sleep(5)
+                status_reject = Waits.Wait10s_ElementLoaded(data["TimeCard"]["approval"]["status_text"])
+                if status_reject.text == 'Rejected':
+                    Logging("- Rejected success")
+                else:
+                    Logging("- Fail")
+            else:
+                Logging("=> Approve don't have approve permission")
+        except WebDriverException:
+            Logging("=> Approve don't have approve permission")
+    except:
+        Logging("-> Crash app")
 
 
 Logging("Như Quỳnh")
