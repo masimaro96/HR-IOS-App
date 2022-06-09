@@ -65,7 +65,7 @@ def execution():
     Logging("- Input ID")
     driver.find_element_by_ios_class_chain(data["pass_login"]).send_keys(data["password"])
     Logging("- Input Password")
-    WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, data["login_button"]))).click()
+    Commands.Wait10s_ClickElement( data["login_button"])
     Logging("=> Click Log In button")
     driver.implicitly_wait(1000)
 
@@ -299,17 +299,6 @@ def add_event():
     Logging("=> Save event")
     time.sleep(5)
 
-def request_vacation():
-    try:
-        Logging("-- Request vacation--")
-        Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
-        Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
-        Logging("- Request Vacation")
-        Commands.Wait10s_ClickElement(data["menu_timecard"]["request_vacation"])
-        Logging("Save request")
-    except:
-        Logging("-> Can't request vacation")
-
 def admin_settings_GPS():
     Commands.Wait10s_ClickElement(data["menu_admin"]["button_admin"])
     Logging("- Admin settings")
@@ -352,6 +341,36 @@ def admin_settings_beacon():
     Logging("- Beacon Settings")
     Commands.Wait10s_ClickElement(data["menu_admin"]["add_Beacon"])
     Logging("- Add Beacon")
+
+def select_date_month():
+    Commands.Wait10s_ClickElement(data["next"])
+    print("- View next date-month")
+    Commands.Wait10s_ClickElement(data["prev"])
+    print("- View pre date-month")
+    Commands.Wait10s_ClickElement(data["calendar_select"])
+    time.sleep(5)
+    Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=19]")
+    time.sleep(5)
+    dateselect = Waits.Wait10s_ElementLoaded(data["TimeCard"]["weekly_status"]["date_calendar"])
+    dateselect_text = dateselect.text
+    time.sleep(5)
+    Commands.Wait10s_ClickElement(data["select_date"])
+    print("- Select calendar")
+
+    return dateselect_text
+
+def input_user_name():
+    #driver.find_element_by_ios_class_chain(data["domain_input"]) "//*[@text='Please insert keyword to search']"))).click()
+
+    ''' Send key "quynh" from keyboard mobile '''
+    driver.is_keyboard_shown()
+    Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='q']")
+    Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='u']")
+    Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='y']")
+    Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='n']")
+    Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='h']")
+    Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='Done']")
+    print("- Search user")
 
 def TC_timesheet():
     Logging("------- Check menu crash - TimeCard -------")
@@ -978,6 +997,32 @@ def CP_report():
     except:
         Logging("-> Crash app")
 
+def attachfile():
+    try:
+        Commands.Wait10s_ClickElement(data["attach_file"]["add_file"])
+        print("- Select attach file")
+        Commands.Wait10s_ClickElement(data["attach_file"]["choose_photo"])
+        print("- Choose photo")
+        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, data["attach_file"]["choose_gallery"]))).click()
+        print("- Choose gallery")
+        Commands.Wait10s_ClickElement(data["attach_file"]["select_photo"])
+        WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, data["attach_file"]["select"]))).click()
+        print("- Select photo")
+        time.sleep(5)
+    except:
+        print("- Can't attach file")
+
+
+def request_vacation():
+    try:
+        Logging("-- Request vacation--")
+        Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
+        Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
+        Logging("- Request Vacation")
+        Commands.Wait10s_ClickElement(data["menu_timecard"]["request_vacation"])
+        Logging("Save request")
+    except:
+        Logging("-> Can't request vacation")
 
 Logging("Như Quỳnh")
 execution()

@@ -95,7 +95,7 @@
             "memo_data": "Hanbiro_memo"
         },
 
-        "calendar_next": "",
+        "calendar_next": "//XCUIElementTypeOther[4]",
         "calendar_prev": "",
         "calendar": "",
         "select_date": "",
@@ -138,6 +138,14 @@
         
         "": "",
         "": ""
+    },
+
+    "attach_file":{
+        "add_file": "",
+        "choose_photo": "",
+        "choose_gallery": "//XCUIElementTypeApplication[@name='HanbiroHR']/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]",
+        "select_photo": "//XCUIElementTypeApplication[@name='HanbiroHR']/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeCollectionView/XCUIElementTypeCell[22]/XCUIElementTypeOther/XCUIElementTypeImage",
+        "select": "//XCUIElementTypeButton[@name='Done']"
     },
 
     "menu_admin":{
