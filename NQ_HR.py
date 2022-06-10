@@ -1012,17 +1012,68 @@ def attachfile():
     except:
         print("- Can't attach file")
 
-
 def request_vacation():
+    Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
+    Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
+    
+    title_request = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["request_vacation_text"])
+    if title_request.text == 'Request vacation':
+        print("=> Request vacation")
+    else:
+        print("=> Crash app")
+        exit(0)   
     try:
-        Logging("-- Request vacation--")
-        Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
-        Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
-        Logging("- Request Vacation")
-        Commands.Wait10s_ClickElement(data["menu_timecard"]["request_vacation"])
-        Logging("Save request")
+        vacation_type = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["AM"])
+        if vacation_type.is_displayed():
+            vacation_type.click()
+            print("- Select vacation type")
+
+            Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["calendar"])
+            Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]")
+            Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]")
+            time.sleep(2)
+            Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["select_calendar"])
+            time.sleep(2)
+
+            ''' Crash app when select date '''
+            try:
+                title_request = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["request_vacation_text"])
+                if title_request.text == 'Request vacation':
+                    print("- Select date vacation")
+                else:
+                    print("=> Crash app")
+                    exit(0)  
+            except WebDriverException: 
+                print("=> Crash app")
+                exit(0)
+
+            ''' Get data of vacation request '''
+            vacation_date = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["request_date_text"])
+            vacation_text = vacation_date.text
+            date_text = vacation_text.split(" ")[0]
+            type_vacation = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["AM"])
+            type_text = type_vacation.text
+            vacation_date_type = date_text + "(" + type_text + ")"            
     except:
-        Logging("-> Can't request vacation")
+        Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["calendar"])
+        Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]")
+        Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]")
+        time.sleep(2)
+        Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["select_calendar"]) 
+        time.sleep(2)
+
+        ''' Get data of vacation request '''
+        vacation_date = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["request_date_text"])
+        vacation_text = vacation_date.text
+        # date_text = vacation_text.split(" ")[0]
+        # type_vacation = Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["AM"])))
+        # type_text = type_vacation.text
+        # vacation_date_type = vacation_text + "(" + type_text + ")"
+        
+    try:
+        attachfile()
+    except:
+        pass
 
 Logging("Như Quỳnh")
 execution()
