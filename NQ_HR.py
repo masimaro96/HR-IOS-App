@@ -344,9 +344,9 @@ def admin_settings_beacon():
 
 def select_date_month():
     Commands.Wait10s_ClickElement(data["next"])
-    print("- View next date-month")
+    Logging("- View next date-month")
     Commands.Wait10s_ClickElement(data["prev"])
-    print("- View pre date-month")
+    Logging("- View pre date-month")
     Commands.Wait10s_ClickElement(data["calendar_select"])
     time.sleep(5)
     Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=19]")
@@ -355,7 +355,7 @@ def select_date_month():
     dateselect_text = dateselect.text
     time.sleep(5)
     Commands.Wait10s_ClickElement(data["select_date"])
-    print("- Select calendar")
+    Logging("- Select calendar")
 
     return dateselect_text
 
@@ -370,7 +370,7 @@ def input_user_name():
     Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='n']")
     Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='h']")
     Commands.Wait10s_ClickElement("//XCUIElementTypeButton[@name='Done']")
-    print("- Search user")
+    Logging("- Search user")
 
 def TC_timesheet():
     Logging("------- Check menu crash - TimeCard -------")
@@ -1000,17 +1000,17 @@ def CP_report():
 def attachfile():
     try:
         Commands.Wait10s_ClickElement(data["attach_file"]["add_file"])
-        print("- Select attach file")
+        Logging("- Select attach file")
         Commands.Wait10s_ClickElement(data["attach_file"]["choose_photo"])
-        print("- Choose photo")
+        Logging("- Choose photo")
         WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, data["attach_file"]["choose_gallery"]))).click()
-        print("- Choose gallery")
+        Logging("- Choose gallery")
         Commands.Wait10s_ClickElement(data["attach_file"]["select_photo"])
         WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, data["attach_file"]["select"]))).click()
-        print("- Select photo")
+        Logging("- Select photo")
         time.sleep(5)
     except:
-        print("- Can't attach file")
+        Logging("- Can't attach file")
 
 def request_vacation():
     Commands.Wait10s_ClickElement(data["menu_timecard"]["button_timecard"])
@@ -1018,15 +1018,15 @@ def request_vacation():
     
     title_request = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["request_vacation_text"])
     if title_request.text == 'Request vacation':
-        print("=> Request vacation")
+        Logging("=> Request vacation")
     else:
-        print("=> Crash app")
+        Logging("=> Crash app")
         exit(0)   
     try:
         vacation_type = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["AM"])
         if vacation_type.is_displayed():
             vacation_type.click()
-            print("- Select vacation type")
+            Logging("- Select vacation type")
 
             Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["calendar"])
             Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]")
@@ -1039,12 +1039,12 @@ def request_vacation():
             try:
                 title_request = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["request_vacation_text"])
                 if title_request.text == 'Request vacation':
-                    print("- Select date vacation")
+                    Logging("- Select date vacation")
                 else:
-                    print("=> Crash app")
+                    Logging("=> Crash app")
                     exit(0)  
             except WebDriverException: 
-                print("=> Crash app")
+                Logging("=> Crash app")
                 exit(0)
 
             ''' Get data of vacation request '''
@@ -1074,6 +1074,51 @@ def request_vacation():
         attachfile()
     except:
         pass
+
+    driver.swipe(start_x=650, start_y=1844, end_x=650, end_y=355, duration=800)
+    time.sleep(5)
+    ''' Select CC '''
+    CC = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["CC"])
+    if CC.is_displayed():
+        Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["CC"])
+        input_user_name()
+        Commands.Wait10s_ClickElement("//*[contains(@text,'quynh1')]")
+        Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["save_cc"])
+        Logging("- Select CC")
+    else:
+        driver.swipe(start_x=650, start_y=1662, end_x=650, end_y=355, duration=800)
+        reason = data["vacation"]["my_vacation"]["input_test"]
+        Commands.Wait10s_InputElement("//*[@text='Please enter your reason']", reason)
+        Logging("- Input reason")
+    
+    Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["button_request"])
+    
+    '''- Check day request
+      + If vacation day is saturday => fail, check again
+      + If memo is empty => fail, check again'''
+    try:
+        fail = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["request_fail"])
+        if fail.text == 'request vacation failure':
+            Logging("--- Request vacation failure - vacation day is saturday---")
+            Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["close_fail"])
+            time.sleep(2)
+            driver.swipe(start_x=650, start_y=355, end_x=650, end_y=2275, duration=800)
+            Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["calendar"])
+            time.sleep(2)
+            Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]")
+            Logging("=> Select start date")
+            
+            Commands.Wait10s_ClickElement("//android.view.ViewGroup[@index='1']//android.widget.Button[@index=16]")
+            Logging("=> Select end date")
+            Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["select_calendar"])
+            Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["button_request"])
+            Logging("=> Send request vacation")
+        else:
+            Logging("=> Request success")
+    except WebDriverException:
+        Logging("=> Request success") 
+
+    Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["button_close"])
 
 Logging("Như Quỳnh")
 execution()
