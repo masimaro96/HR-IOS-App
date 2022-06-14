@@ -360,7 +360,7 @@ def select_date_month():
     return dateselect_text
 
 def input_user_name():
-    #driver.find_element_by_ios_class_chain(data["domain_input"]) "//*[@text='Please insert keyword to search']"))).click()
+    #driver.find_element_by_ios_class_chain(data["domain_input"]) "//*[@text='Please insert keyword to search']")
 
     ''' Send key "quynh" from keyboard mobile '''
     driver.is_keyboard_shown()
@@ -1119,6 +1119,103 @@ def request_vacation():
         Logging("=> Request success") 
 
     Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["button_close"])
+
+def log_in():
+    ''' Log in '''
+    id_user2 = data["id_name_2"]
+    pass_user = data["pass_input"]
+    Commands.Wait10s_Clear_InputElement(data["vacation"]["vacation_approve"]["user_name"], id_user2)
+    Logging("- Input ID")
+    #driver.find_element_by_ios_class_chain(data["domain_input"]) "//*[@text='Password']")))
+    Commands.Wait10s_InputElement(data["password"], pass_user)
+    Logging("- Input Password")
+    Commands.Wait10s_ClickElement("//*[contains(@text,'Login')]")
+    Commands.Wait10s_ClickElement(data["button_login"])
+    Logging("=> Click Log In button")
+    driver.implicitly_wait(50)
+
+def approve_request():
+
+    request_vacation()
+
+    Logging(" ")
+    ''' Log out '''
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["setting_button"])
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["logout"])
+    Logging("=> Change to user 2 to approve request")
+    log_in()
+
+    ''' Check request vacation of user 1 '''
+    time.sleep(5)
+    Logging("- Check request vacation")
+    Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
+    Commands.Wait10s_ClickElement(data["vacation"]["manage_processing"]["vacation_approve"])
+    time.sleep(3)
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["search"])
+    input_user_name()
+    Logging("- Search user")
+
+    Commands.Wait10s_ClickElement("//*[contains(@text,'quynh1')]")
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["select_user"])
+    Logging("- Select user")
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["approve"])
+    Logging("- Approve request")
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["accept_approve"])
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["close_popup"])
+    Logging("=> Approve success")
+
+    text_approve = Waits.Wait10s_ElementLoaded(data["vacation"]["vacation_approve"]["approve_text"])
+    if text_approve.text == 'Approved':
+        Logging("=> Request have approve success")
+    else:
+        Logging("=> Approve fail")
+
+def cancel_request():
+    ''' User cancel request '''
+    Logging(" ")
+    ''' Log out '''
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["setting_button"])
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["logout"])
+    Logging("=> Change to user 1 - check request have been approve - cancel request")
+
+    ''' Log in '''
+    log_in()
+
+    ''' Check request vacation of user 1 '''
+    time.sleep(5)
+    Logging("- Check request vacation")
+    Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
+    Commands.Wait10s_ClickElement(data["vacation"]["manage_processing"]["vacation_approve"])
+    time.sleep(3)
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["search"])
+    input_user_name()
+
+    Commands.Wait10s_ClickElement("//*[contains(@text,'quynh1')]")
+
+    text_approve = Waits.Wait10s_ElementLoaded(data["vacation"]["vacation_approve"]["approve_text"])
+    if text_approve.text == 'Approved':
+        Logging("=> Request have approve success")
+    else:
+        Logging("=> Approve fail")
+
+    Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
+    time.sleep(5)
+    Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["vacation_status"]["vacationstatus"])
+    time.sleep(10)
+    Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["vacation_status"]["cancel_request"])
+    Commands.Wait10s_ClickElement(data["vacation"]["my_vacation"]["vacation_status"]["button_ok"])
+    Logging("- Cancel request")
+    time.sleep(10)
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["close_popup"])
+    Logging("=> Approve cancel request success")
+    time.sleep(5)
+
+    text_cancel = Waits.Wait10s_ElementLoaded(data["vacation"]["my_vacation"]["vacation_status"]["text_request"])
+    if text_cancel.text == 'User cancel':
+        Logging("=> Send cancel request success")
+    else:
+        Logging("=> Approve Arbitrary decision")
+
 
 Logging("Như Quỳnh")
 execution()
