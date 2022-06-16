@@ -1216,6 +1216,32 @@ def cancel_request():
     else:
         Logging("=> Approve Arbitrary decision")
 
+def apporve_cancel_request():
+    Logging(" ")
+    ''' Log out '''
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["setting_button"])
+    Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["logout"])
+    Logging("=> Change to user 2 - approve cancel request")
+    log_in()
 
+    try:
+        Logging("- Check request vacation")
+        Commands.Wait10s_ClickElement(data["vacation"]["button_vacation"])
+        Commands.Wait10s_ClickElement(data["vacation"]["manage_processing"]["vacation_approve"])
+        time.sleep(3)
+        Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["cancel_request"])
+        Logging("- Click cancel request")
+        Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["status"])
+        Commands.Wait10s_ClickElement("//*[@text='Request']")
+        Logging("- Select status request")
+        Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["request"])
+        Logging("- Select request")
+        Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["approve_cancel"])
+        Logging("- APPROVE CANCELLATION")
+        Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["accept_approve_cancel"])
+        Logging("=> Cancel request")
+        Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["close_popup"])
+    except:
+        Logging("=> Cancel request fail")
 Logging("Như Quỳnh")
 execution()
