@@ -74,7 +74,10 @@
     "button_notification": "(//XCUIElementTypeOther[@name='Hanbiro HR'])[1]/following-siblingg::XCUIElementTypeOther",
     
     "menu_timecard":{
-        "button_timecard": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[2]",
+        "button_timecard": "//XCUIElementTypeOtpageher[2]//XCUIElementTypeButton[2]",
+
+        "page_timecard": "//XCUIElementTypeApplication[@name='HanbiroHR']/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther",
+
         "button_timesheet": "//XCUIElementTypeOther[33]/XCUIElementTypeOther[1]//XCUIElementTypeOther[3]",
 
         "event":{
@@ -152,17 +155,17 @@
         "button_admin": "//XCUIElementTypeOther[2]//XCUIElementTypeButton[4]",
 
         "GPS_setting": "//XCUIElementTypeOther[@name='GPS Setting']",
-        "add_GPS": "//XCUIElementTypeOther[@name='GPS Setting'])[1]/XCUIElementTypeOther//XCUIElementTypeOther[1]//XCUIElementTypeOther[2]",
+        "add_GPS": "//XCUIElementTypeOther[@name='󰐕']",
         "popup": "**/XCUIElementTypeOther[`label == 'Yes'`]",
         "search_gps": "//XCUIElementTypeOther[@name='Please input a address']",
         "gps": "(//XCUIElementTypeOther[@name='Nguyễn Thị Thập, District 7, Ho Chi Minh City, Vietnam'])[2]",
-        "workplace": "//XCUIElementTypeStaticText[@name='Workplace']/XCUIElementTypeOther[3]",
+        "workplace": "(//XCUIElementTypeOther[@name='Location Workplace Range 150 0 150 500'])[2]/XCUIElementTypeOther[3]",
         "select_workplace": "(//XCUIElementTypeOther[@name='VietNam'])[1]",
         "save_GPS": "(//XCUIElementTypeOther[@name='Save'])[1]",
         "done": "//XCUIElementTypeButton[@name='Return']",
         "close_popup": "(//XCUIElementTypeOther[@name='Close'])[2]",
         "key_search": "nguyen",
-        "delete_gps": "(//XCUIElementTypeOther[@name='Delete'])[2]",
+        "delete_gps": "(//XCUIElementTypeOther[@name=' Delete'])[3]/XCUIElementTypeOther",
         "button_yes": "//XCUIElementTypeOther[@name='Yes']",
 
         "back_button": "(//XCUIElementTypeOther[@name='GPS Setting'])[2]/XCUIElementTypeOther[1]/XCUIElementTypeOther",

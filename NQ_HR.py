@@ -1,6 +1,7 @@
 from asyncio import events
 from distutils.log import Log
 import time, sys, unittest, random, json, openpyxl, platform
+from xml.dom.minidom import Element
 from datetime import datetime
 from appium import webdriver
 from random import randint
@@ -21,7 +22,7 @@ from openpyxl.styles import Color, Fill
 from openpyxl.cell import Cell
 
 from NQ_function import Logging, data
-from framework_sample import *
+# from framework_sample import *
 
 APPIUM_PORT = '4723'
 udid = 'bc86e429485c13f34837866fde36e7ed55646317'
@@ -37,26 +38,157 @@ command_executor ='http://127.0.0.1:%s/wd/hub' % APPIUM_PORT
     "app": app_path
 }'''
 
+start_time = time.time()
+
 desired_capabilities = {
-    #"xcodeOrgId": "9689HPSFXL",
-    #"xcodeSigningId": "iPhone Developer",
+    "xcodeOrgId": "9689HPSFXL",
+    "xcodeSigningId": "iPhone Developer",
     "deviceName": "Hanbiro Iphone",
     "platformName": "IOS",
     "orientation": "PORTRAIT",
-    #"newCommandTimeout": 0,
+    "newCommandTimeout": 0,
     "automationName": "XCUITest",
     "derivedDataPath" : "/Users/hanbiro/Library/Developer/Xcode/DerivedData/WebDriverAgent-aghlrsejdreqngftgvcqwnjgrbou",
     "wdaConnectionTimeout": 500000,
     "udid": udid,
-    "app": app_path
+    "app": app_path,
+    "bundleID": "com.hanbiro.RNGlobalHR",
+    "wdaLaunchTimeout": 300000,
+    "waitForQuiescene": False,
+    "waitForIdleTimeout": 0,
+    "autoAcceptAlerts": True
+    #"showXcodeLog": True,
+    #"showIOSLog": True
 }
 
 driver = webdriver.Remote(command_executor, desired_capabilities)
 
+end_time = time.time()
+duration = end_time - start_time
+print("duration: %s" % duration)
+
 n = random.randint(1,3000)
 
+class Commands():
+    def Wait10s_ClickElement(xpath):
+        '''• Usage: Wait until the element visible and do the click
+                return WebElement'''
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+        element.click()
+
+        return element
+
+    def InputElement(xpath, value):
+        '''• Usage: Send key value in input box
+                return WebElement'''
+
+        element = driver.find_element_by_xpath(xpath)
+        element.send_keys(value)
+
+        return element
+    
+    def InputElement_2Values(xpath, value1, value2):
+        '''• Usage: Send key with 2 values in input box
+                return WebElement'''
+
+        element = driver.find_element_by_xpath(xpath)
+        element.send_keys(value1)
+        element.send_keys(value2)
+
+        return element
+
+    def Wait10s_InputElement(xpath, value):
+        '''• Usage: Wait until the input box visible and send key value
+                return WebElement'''
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+        element.send_keys(value)
+
+        return element
+
+    def Wait10s_EnterElement(xpath, value):
+        '''• Usage: Wait until the input box visible and send key value
+            return WebElement'''
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+        element.send_keys(value)
+        element.send_keys(Keys.ENTER)
+
+        return element
+
+    def Wait10s_Clear_InputElement(xpath, value):
+        '''• Usage: Wait until the input box visible and send key value
+                return WebElement'''
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+        element.clear()
+        element.send_keys(value)
+
+        return element
+
+    def Wait10s_Clear_Click_InputElement(xpath, value):
+        '''• Usage: Wait until the input box visible and send key value
+            return WebElement'''
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+        element.clear()
+        element.click()
+        element.send_keys(value)
+
+        return element
+
+class Waits():
+    def WaitElementLoaded(time, xpath):
+        '''• Usage: Wait until element VISIBLE in a selected time period'''
+        
+        WebDriverWait(driver, time).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+
+        return element
+
+    def Wait10s_ElementLoaded(xpath):
+        '''• Usage: Wait 10s until element VISIBLE'''
+        
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+
+        return element
+
+    def WaitElementInvisibility(time, xpath):
+        '''• Usage: Wait until element INVISIBLE in a selected time period'''
+        
+        WebDriverWait(driver, time).until(EC.invisibility_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+
+        return element
+
+    def Wait10s_ElementInvisibility(xpath):
+        '''• Usage: Wait 10s until element INVISIBLE'''
+        
+        WebDriverWait(driver, 10).until(EC.invisibility_of_element_located((By.XPATH, xpath)))
+        element = driver.find_element_by_xpath(xpath)
+
+        return element
+    
+    def WaitUntilPageIsLoaded(page_xpath):
+        if bool(page_xpath) == True:
+            # wait until page's element is present
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, page_xpath)))
+
+        # check if the loading icon is not present at the page -> page is completely loaded
+        try:
+            WebDriverWait(driver, 10).until(EC.invisibility_of_element_located((By.XPATH, "//div[@class='loading-dialog hide']")))
+        except WebDriverException:
+            pass
 
 def execution():
+    time.sleep(10)
     Logging("------- Login to app -------")
     # Input information for log-in
     driver.find_element_by_ios_class_chain(data["domain"]).send_keys(data["domain_name"])
@@ -65,11 +197,17 @@ def execution():
     Logging("- Input ID")
     driver.find_element_by_ios_class_chain(data["pass_login"]).send_keys(data["password"])
     Logging("- Input Password")
-    Commands.Wait10s_ClickElement( data["login_button"])
+    Commands.Wait10s_ClickElement(data["login_button"])
     Logging("=> Click Log In button")
-    driver.implicitly_wait(1000)
+    #driver.implicitly_wait(1000)
 
-    add_event()
+    #add_event()
+    #Commands.Wait10s_ClickElement("Timecard")
+    #element = Commands.Wait10s_ClickElement("//*[contains(., 'Timesheet')]")
+    #Waits.Wait10s_ElementLoaded("//*[contains(., 'Work Policy')]")
+    time.sleep(20)
+    clock_in()
+    admin_settings_GPS()
 
 def clock_in():
     reason_OT = data["OT"]["reason_text"]
@@ -94,15 +232,17 @@ def clock_in():
                 Logging("=> Apply OT not display")
         except WebDriverException:
             Logging("=> Apply OT not display")
-
+        time.sleep(20)
         Commands.Wait10s_ClickElement(data["clock_in"]["button_clock_in"])
         Logging("=> Click clock in")
-
+        time.sleep(20)
         status_clock_in= Waits.Wait10s_ElementLoaded(data["clock_in"]["status_late"])
         if status_clock_in.text == 'Tardiness':
             Logging("=> Clock in late")
             Commands.Wait10s_InputElement(data["clock_in"]["reason_late"], reason_late)
             Logging("=> Input reason late")
+            time.sleep(20)
+            Commands.Wait10s_ClickElement(data["clock_in"]["status_late"])
             Commands.Wait10s_ClickElement(data["clock_in"]["button_save"])
             Logging("=> Save")
         else:
@@ -130,12 +270,13 @@ def clock_out():
         Logging("--- Clock out ---")
         Commands.Wait10s_ClickElement(data["clock_out"]["button_clock_out"])
         Logging("=> Click clock out")
-
+        time.sleep(20)
         status = Waits.Wait10s_ElementLoaded(data["clock_out"]["status_clock_out"])
         if status.text == 'Leave Early':
             Logging("=> Clock out early")
             Commands.Wait10s_InputElement(data["clock_out"]["reason_clock_out"], reason_key)
             Logging("=> Input reason")
+            time.sleep(10)
             Commands.Wait10s_ClickElement(data["clock_out"]["confirm_clock_out"])
             Commands.Wait10s_ClickElement(data["clock_out"]["clock_out_success"])
             Logging("=> Clock out success")
@@ -305,11 +446,14 @@ def admin_settings_GPS():
 
     Commands.Wait10s_ClickElement(data["menu_admin"]["GPS_setting"])
     Logging("- GPS Settings")
+    time.sleep(5)
     Commands.Wait10s_ClickElement(data["menu_admin"]["add_GPS"])
-    Commands.Wait10s_ClickElement(data["menu_admin"]["popup"])
+    time.sleep(10)
+    driver.find_element_by_ios_class_chain(data["menu_admin"]["popup"]).click()
     Logging("- Add GPS")
     Commands.Wait10s_ClickElement(data["menu_admin"]["search_gps"])
     Logging("- Input GPS")
+    time.sleep(10)
     Commands.InputElement(data["menu_admin"]["search_gps"], "Nguyen")
     Logging("- Enter value")
     Commands.Wait10s_ClickElement(data["menu_admin"]["done"])
@@ -318,12 +462,16 @@ def admin_settings_GPS():
     Commands.Wait10s_ClickElement(data["menu_admin"]["workplace"])
     Commands.Wait10s_ClickElement(data["menu_admin"]["select_workplace"])
     Logging("- Select workplace")
+    time.sleep(10)
     Commands.Wait10s_ClickElement(data["menu_admin"]["save_GPS"])
+    time.sleep(5)
     Commands.Wait10s_ClickElement(data["menu_admin"]["close_popup"])
     Logging("- Save GPS")
-
-    driver.swipe(start_x=1000, start_y=450, end_x=500, end_y=450, duration=800)
+    time.sleep(5)
+    driver.swipe(start_x=286, start_y=140, end_x=100, end_y=140, duration=800)
+    time.sleep(5)
     Commands.Wait10s_ClickElement(data["menu_admin"]["delete_gps"])
+    time.sleep(5)
     Commands.Wait10s_ClickElement(data["menu_admin"]["button_yes"])
     Logging("- Delete GPS")
     Commands.Wait10s_ClickElement(data["menu_admin"]["close_popup"])
@@ -1243,5 +1391,3 @@ def apporve_cancel_request():
         Commands.Wait10s_ClickElement(data["vacation"]["vacation_approve"]["close_popup"])
     except:
         Logging("=> Cancel request fail")
-Logging("Như Quỳnh")
-execution()
