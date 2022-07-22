@@ -171,12 +171,16 @@
         "back_button": "(//XCUIElementTypeOther[@name='GPS Setting'])[2]/XCUIElementTypeOther[1]/XCUIElementTypeOther",
 
         "Wifi_setting": "//XCUIElementTypeOther[@name='WiFi Setting']",
-        "add_wifi": "//XCUIElementTypeOther[@name='GPS Setting'])[1]/XCUIElementTypeOther//XCUIElementTypeOther[1]//XCUIElementTypeOther[2]",
-        "": "",
+        "add_wifi": "(//XCUIElementTypeOther[@name=' Hanbiro Global Connected'])[6]",
+        "next_button": "(//XCUIElementTypeOther[@name='Next'])[2]",
+        "workplace_wifi": "(//XCUIElementTypeOther[@name='Name Workplace'])[2]/XCUIElementTypeOther[3]",
+        "select_workplace_wifi": "(//XCUIElementTypeOther[@name='VietNam'])[2]",
+        "next": "//XCUIElementTypeOther[@name='Next']",
+        "complete": "(//XCUIElementTypeOther[@name='Complete'])[3]",
 
         "Beacon_setting": "//XCUIElementTypeOther[@name='Beacon Setting']",
         "add_Beacon": "//XCUIElementTypeOther[@name='GPS Setting'])[1]/XCUIElementTypeOther//XCUIElementTypeOther[1]//XCUIElementTypeOther[2]",
-        "": "",
+        
         "": ""
     },
 
